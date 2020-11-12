@@ -9,5 +9,5 @@ export function ConvertDate(date, minutes = false) {
     if(minutes) date = new Date(date * 1000).getMinutes()
     else date = new Date(date * 1000).getHours()
 
-    return date
+    return date < 10 ? `0${date}` : date;
 }
