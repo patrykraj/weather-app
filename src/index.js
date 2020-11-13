@@ -1,12 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import App from './App';
+import Forecast from './containers/Forecast';
+
+import { BrowserRouter as Router } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Router basename={process.env.PUBLIC_URL}>
+      <Switch>
+          <Route path="/" exact component={App} />
+          <Route path="/forecast" component={Forecast} />
+      </Switch>
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );

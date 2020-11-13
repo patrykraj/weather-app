@@ -87,7 +87,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         {error ? error.msg : null}
-        <Form setData={setData} searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} setError={setError} />
+        <Form setData={setData} searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} setError={setError} setLoading={setLoading} />
         {content}
       </header>
     </div>
