@@ -10,22 +10,26 @@ import Form from './components/Form'
 
 function App() {
   const [searchedQuery, setSearchedQuery] = useState('')
-  // const [location, setLocation] = useState(null)
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState(null)
   const [coords, setCoords] = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     if ("geolocation" in navigator) {
       setLoading(true)
 
-      console.log("Available");
       navigator.geolocation.getCurrentPosition(function(position) {
         setCoords({
           lat: position.coords.latitude,
           lon: position.coords.longitude
         })
-      }, err => console.log("REJECTED LOCATION ACCESS"))
+      }, err => {
+        setLoading(false)
+        setError({
+          msg: err.message
+        })
+      })
     } else {
       console.log("Not Available");
     }
@@ -36,10 +40,15 @@ function App() {
         axios
           .get(`https://api.openweathermap.org/data/2.5/weather?lat=${coords.lat}&lon=${coords.lon}&appid=${key}`)
           .then(res => {
-          console.log('RESPONSE', res)
-          setData(res.data)
-          setLoading(false)
-        })
+            setData(res.data)
+            setLoading(false)
+          })
+          .catch(err => 
+            setError({ 
+                msg: err.response ? err.response.data.message : err.message, 
+                query: null
+            })
+          )
       }
   }, [coords])
 
@@ -64,10 +73,10 @@ function App() {
           </p>
           <p>
             <span>
-              Sunrise: {ConvertDate(data.sys.sunrise)}:{ConvertDate(data.sys.sunrise, true)}
+              Sunrise: {ConvertDate(data.sys.sunrise, data.timezone)}:{ConvertDate(data.sys.sunrise, data.timezone, true)}
             </span>
             <span>
-              Sunset: {ConvertDate(data.sys.sunset)}:{ConvertDate(data.sys.sunset, true)}  
+              Sunset: {ConvertDate(data.sys.sunset, data.timezone)}:{ConvertDate(data.sys.sunset, data.timezone, true)}  
             </span>
           </p>
         </div>
@@ -77,7 +86,8 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <Form setData={setData} searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} />
+        {error ? error.msg : null}
+        <Form setData={setData} searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} setError={setError} />
         {content}
       </header>
     </div>

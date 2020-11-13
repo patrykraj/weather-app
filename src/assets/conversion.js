@@ -5,9 +5,11 @@ export function ConvertUnit(val, unit = {from: 0, to: 1}) {
     return (Math.round(val)).toFixed()
 }
 
-export function ConvertDate(date, minutes = false) {
-    if(minutes) date = new Date(date * 1000).getMinutes()
-    else date = new Date(date * 1000).getHours()
+export function ConvertDate(date, timezone, minutes = false) {
+    let newDate = new Date((date + timezone) * 1000)
 
-    return date < 10 ? `0${date}` : date;
+    if(minutes) newDate = newDate.getUTCMinutes()
+    else newDate = newDate.getUTCHours()
+
+    return newDate < 10 ? `0${newDate}` : newDate;
 }

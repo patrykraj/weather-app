@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { API_KEY as key } from '../assets/constants'
 
-function Form({ setData, searchedQuery, setSearchedQuery }) {
+function Form({ setData, searchedQuery, setSearchedQuery, setError }) {
 
     const handleSetQuery = (e) => {
         if (!/^[a-zA-Z\s]*$/g.test(e.target.value)) return;
@@ -11,7 +11,6 @@ function Form({ setData, searchedQuery, setSearchedQuery }) {
 
     const handleSearchQuery = (e) => {
         e.preventDefault();
-        console.log(searchedQuery)
 
         if(searchedQuery.trim().length > 2) {
             axios
@@ -19,6 +18,13 @@ function Form({ setData, searchedQuery, setSearchedQuery }) {
                 .then(city => {
                     setSearchedQuery('')
                     setData(city.data)
+                    setError(null)
+                })
+                .catch(err => {
+                    setError({ 
+                        msg: err.response ? err.response.data.message : err.message, 
+                        query: searchedQuery
+                    })
                 })
         }
     }
