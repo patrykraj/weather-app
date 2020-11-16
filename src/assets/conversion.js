@@ -1,6 +1,6 @@
 export function ConvertUnit(val, unit = {from: 0, to: 1}) {
-    if(unit.from === 0) val = val - 273.15
-    else return val
+    // if(unit.from === 0) val = val - 273.15
+    // else return val
 
     return (Math.round(val)).toFixed()
 }
