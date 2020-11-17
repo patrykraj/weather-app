@@ -6,6 +6,7 @@ import { FORECAST_API_KEY as key } from '../assets/constants'
 
 import Form from '../components/Form'
 import Day from '../components/forecast/Day'
+import Loader from '../components/Loader'
 
 function Forecast(props) {
     const [data, setData] = useState(null)
@@ -31,7 +32,7 @@ function Forecast(props) {
     }, [props])
 
     let content;
-    if(loading) content = <h1>Loading</h1>
+    if(loading) content = <Loader />
     else if(!data && !loading) content = <h1>Forecast</h1>
     else content = <>
         <h1>{data.city_name}, {data.country_code}:</h1>

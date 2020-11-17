@@ -7,6 +7,7 @@ import { WEATHER_API_KEY as key } from '../assets/constants'
 import { ConvertUnit, ConvertDate } from '../assets/conversion'
 
 import Form from '../components/Form'
+import Loader from '../components/Loader'
 
 function App() {
   const [searchedQuery, setSearchedQuery] = useState('')
@@ -54,7 +55,7 @@ function App() {
   }, [coords])
 
   let content;
-  if(loading) content = <h1>Loading...</h1>
+  if(loading) content = <Loader />
   else if(!loading && !data) content = <h1>Select location</h1>
   else content = <>
         <h2>{data.name}, {data.sys.country}</h2>
