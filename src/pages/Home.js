@@ -58,7 +58,7 @@ function App() {
   else if(!loading && !data) content = <h1>Select location</h1>
   else content = <>
         <h2>{data.name}, {data.sys.country}</h2>
-        <Link to={`/forecast/${data.id}`}>Check 16 day forecast</Link>
+        <Link to={`/forecast/${data.name}`} className='forecast-link'>Check 16 day forecast</Link>
         <h1><span>Current:</span>{ConvertUnit(data.main.temp)}&deg;C</h1>
         <div>
           <p>{data.weather[0].description}</p>

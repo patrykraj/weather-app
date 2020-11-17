@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 import { FORECAST_API_KEY as key } from '../assets/constants'
-import { ConvertUnit } from '../assets/conversion'
 
 import Form from '../components/Form'
+import Day from '../components/forecast/Day'
 
 function Forecast(props) {
     const [data, setData] = useState(null)
@@ -13,14 +14,19 @@ function Forecast(props) {
     const [error, setError] = useState(null)
 
     useEffect(() => {   
-        const id = props.match.params.id
+        const name = props.match.params.id
         setLoading(true)
         
         axios
-            .get(`https://api.weatherbit.io/v2.0/forecast/daily?&city_id=${id}&key=${key}`)
+            .get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${name}&key=${key}`)
             .then(res => {
                 setLoading(false)
                 setData(res.data)
+            })
+            .catch(err => {
+                setError({
+                    msg: err.message
+                })
             })
     }, [props])
 
@@ -28,16 +34,21 @@ function Forecast(props) {
     if(loading) content = <h1>Loading</h1>
     else if(!data && !loading) content = <h1>Forecast</h1>
     else content = <>
-        <h1>Weather forecast for {data.city_name}, {data.country_code}:</h1>
-        {data.data.map(day => <p key={day.datetime}>{day.datetime.slice(-5,day.datetime.length)} - max: {ConvertUnit(day.max_temp)}&deg;C min: {ConvertUnit(day.min_temp)}&deg;C</p>)}
+        <h1>{data.city_name}, {data.country_code}:</h1>
+        <ul className='day-list'>
+            {data.data.map(day => <Day key={day.datetime} weather={day.weather.icon} date={day.datetime.slice(-5,day.datetime.length)} max_temp={day.max_temp} low_temp={day.min_temp} pop={day.pop} />)}
+        </ul>
     </>
 
     return (
-        <>
+        <div className='Forecast'>
+            <h1 className='title'>
+                <Link to='/'>Weather Forecast</Link>
+            </h1>
             <Form forecast setData={setData} searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} setError={setError} setLoading={setLoading} />
-            <h1>FORECAST</h1>
             {content}
-        </>
+            {error ? <p>{error.msg}</p> : null}
+        </div>
     )
 }
 

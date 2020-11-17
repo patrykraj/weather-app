@@ -1,3 +1,9 @@
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
 .App {
   text-align: center;
 }
@@ -17,7 +23,7 @@ span {
   }
 }
 
-.App-header {
+.App-header, .Forecast {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -39,4 +45,44 @@ span {
   to {
     transform: rotate(360deg);
   }
+}
+
+.title a {
+  text-transform: uppercase;
+  color: white;
+  background-color: rgba(255,255,255, .3);
+  padding: 5px 15px;
+  border-radius: 5px;
+}
+
+.forecast-link {
+  color: white;
+  background-color: rgba(255,255,255, .3);
+  padding: 5px 15px;
+  border-radius: 5px;
+}
+
+.day-list {
+  padding: 0;
+  margin: 0;
+  width: 80%;
+  max-width: 768px;
+}
+
+.day {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background: rgba(255,255,255,.2);
+  margin: 10px 0;
+  padding: 0 1rem;
+}
+
+.day-temp {
+  display: flex;
+}
+
+.day-weather-icon {
+  max-height: 80px;
 }
