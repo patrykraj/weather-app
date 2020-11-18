@@ -1,9 +1,10 @@
-import axios from "axios";
-
 import { WEATHER_API_KEY as w_key } from '../assets/constants'
 import { FORECAST_API_KEY as f_key } from '../assets/constants'
 
-function Form({ setData, searchedQuery, setSearchedQuery, setError, setLoading, forecast }) {
+import { connect } from "react-redux";
+import * as actions from '../store/actions'
+
+function Form({ searchedQuery, setSearchedQuery, onSetError, forecast, onFetchWeatherByName }) {
 
     const handleSetQuery = (e) => {
         if (!/^[a-zA-Z\s]*$/g.test(e.target.value)) return;
@@ -15,30 +16,9 @@ function Form({ setData, searchedQuery, setSearchedQuery, setError, setLoading, 
         const url = forecast ? `https://api.weatherbit.io/v2.0/forecast/daily?city=${searchedQuery}&key=${f_key}` : `https://api.openweathermap.org/data/2.5/weather?q=${searchedQuery}&appid=${w_key}&units=metric`
 
         if(searchedQuery.trim().length > 2) {
-            setLoading(true)
-            setError(null)
-
-            axios
-                .get(url)
-                .then(city => {
-                    setSearchedQuery('')
-                    setData(city.data)
-                    setLoading(false)
-
-                    if(forecast) {
-                        var newurl = window.location.protocol + "//" + window.location.host + '/forecast/' + searchedQuery;
-                        window.history.pushState({path:newurl},'',newurl);
-                    }
-                })
-                .catch(err => {
-                    setError({ 
-                        msg: err.response ? err.response.data.message : err.message, 
-                        query: searchedQuery
-                    })
-                    setLoading(false)
-                })
+            onFetchWeatherByName(forecast, url)
         } else {
-            setError({
+            onSetError({
                 msg: 'Min. 3 characters'
             })
         }
@@ -52,4 +32,11 @@ function Form({ setData, searchedQuery, setSearchedQuery, setError, setLoading, 
     )
 }
 
-export default Form
+const mapDispatchToProps = dispatch => {
+    return {
+        onFetchWeatherByName: (forecast, url) => dispatch(actions.fetchWeatherByName(forecast, url)),
+        onSetError: (payload) => dispatch(actions.setError(payload))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Form)

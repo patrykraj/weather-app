@@ -18,7 +18,7 @@ function CurrentWeather({ data }) {
                     <span>Feels like: {ConvertUnit(data.main.feels_like)}&deg;</span>
                     <span>Pressure: {data.main.pressure}hPa</span>
                     <span>Humidity: {data.main.humidity}%</span>
-                    <span>Wind: {data.wind.speed}mph</span>
+                    <span>Wind: {data.wind.speed}m/s</span>
                 </p>
                 <p>
                     <span>

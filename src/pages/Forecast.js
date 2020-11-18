@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
-import axios from 'axios'
 import { Link } from 'react-router-dom'
+
+import * as actions from '../store/actions'
+import { connect } from "react-redux";
 
 import { FORECAST_API_KEY as key } from '../assets/constants'
 
@@ -9,30 +11,14 @@ import Day from '../components/forecast/Day'
 import Loader from '../components/Loader'
 
 function Forecast(props) {
-    const [data, setData] = useState(null)
-    const [loading, setLoading] = useState(false)
     const [searchedQuery, setSearchedQuery] = useState('')
-    const [error, setError] = useState(null)
     
+    const { onFetchForecastAuto, loading, data, error } = props
     const name = props.match.params.id
 
     useEffect(() => {
-        setLoading(true)
-        setError(null)
-        
-        axios
-            .get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${name}&key=${key}`)
-            .then(res => {
-                setLoading(false)
-                setData(res.data)
-            })
-            .catch(err => {
-                setError({
-                    msg: err.message
-                })
-                setLoading(false)
-            })
-    }, [name])
+        onFetchForecastAuto(name, key)
+    }, [name, onFetchForecastAuto])
 
     let content;
     if(loading) content = <Loader />
@@ -49,11 +35,26 @@ function Forecast(props) {
             <h1 className='title'>
                 <Link to='/'>Weather Forecast</Link>
             </h1>
-            <Form forecast setData={setData} searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} setError={setError} setLoading={setLoading} />
+            <Form forecast searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} />
             {content}
             {error ? <p>{error.msg}</p> : null}
         </div>
     )
 }
 
-export default Forecast
+const mapStateToProps = state => {
+    return {
+      data: state.forecastData,
+      loading: state.loading,
+      error: state.error
+    }
+  }
+  
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onFetchForecastAuto: (name, key) => dispatch(actions.fetchForecastAuto(name, key))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Forecast)

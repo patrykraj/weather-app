@@ -14,6 +14,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: true,
+                error: null
             }
 
         case actions.FETCH_WEATHER_SUCCESS:
@@ -81,6 +82,13 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 loading: action.payload
             }
+        
+            case actions.FETCH_WEATHER_BY_NAME_SUCCESS:
+                return {
+                    ...state,
+                    loading: false,
+                    weatherData: action.payload
+                }
 
         default: {
             return {

@@ -88,7 +88,7 @@ export const fetchForecastFailure = (err) => {
 
 export const fetchForecast = ({ name, key }) => {
     return async dispatch => {
-        fetchWeatherStart()
+        dispatch(fetchWeatherStart())
         
         axios
             .get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${name}&key=${key}`)
@@ -97,6 +97,59 @@ export const fetchForecast = ({ name, key }) => {
             })
             .catch(err => {
                 dispatch(fetchForecastFailure(err.response ? err.response.data.message : err.message))
+            })
+    }
+}
+
+export const fetchWeatherByNameSuccess = (data, forecast) => {
+    return {
+        type: forecast ? actions.FETCH_FORECAST_SUCCESS : actions.FETCH_WEATHER_BY_NAME_SUCCESS,
+        payload: data
+    }
+}
+
+export const fetchWeatherByNameFailure = (err) => {
+    return {
+        type: actions.FETCH_WEATHER_BY_NAME_FAILURE,
+        payload: err
+    }
+}
+
+export const fetchWeatherByName = (forecast, url) => {
+    return async dispatch => {
+        dispatch(fetchWeatherStart())
+
+        axios
+            .get(url)
+            .then(city => {
+                dispatch(fetchWeatherByNameSuccess(city.data, forecast))
+
+                if(forecast) {
+                    var newurl = window.location.protocol + "//" + window.location.host + '/forecast/' + city.data.name;
+                    window.history.pushState({path:newurl},'',newurl);
+                }
+            })
+            .catch(err => {
+                dispatch(fetchWeatherByNameFailure({
+                    msg: err.response ? err.response.data.message : err.message
+                }))
+            })
+    }
+}
+
+export const fetchForecastAuto = (name, key) => {
+    return async dispatch => {
+        dispatch(fetchWeatherStart())
+
+        axios
+            .get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${name}&key=${key}`)
+            .then(res => {
+                dispatch(fetchForecastSuccess(res.data))
+            })
+            .catch(err => {
+                dispatch(fetchForecastFailure({
+                    msg: err.response ? err.response.data.message : err.message
+                }))
             })
     }
 }
