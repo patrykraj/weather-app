@@ -2,7 +2,6 @@ import logo from '../logo.svg';
 import { useEffect, useState } from 'react';
 
 import { WEATHER_API_KEY as key } from '../assets/constants'
-// import axios from 'axios'
 import { connect } from "react-redux";
 import * as actions from '../store/actions'
 
@@ -10,15 +9,13 @@ import Form from '../components/Form'
 import Loader from '../components/Loader'
 import CurrentWeather from '../components/weather/CurrentWeather'
 
-function Home({ coords, onSetCoords, data, onFetchWeatherByCoords, loading, onSetLoading }) {
+function Home({ onFetchWeatherStart, coords, onSetCoords, data, onSetData, onFetchWeatherByCoords, loading, onSetLoading }) {
   const [searchedQuery, setSearchedQuery] = useState('')
-  // const [loading, setLoading] = useState(false)
-  // const [data, setData] = useState(null)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     if ("geolocation" in navigator) {
-      // setLoading(true)
+      onFetchWeatherStart()
 
       navigator.geolocation.getCurrentPosition(function(position) {
         onSetCoords({
@@ -33,25 +30,11 @@ function Home({ coords, onSetCoords, data, onFetchWeatherByCoords, loading, onSe
     } else {
       console.log("Not Available");
     }
-  }, [onSetCoords])
+  }, [onSetCoords, onFetchWeatherStart])
 
   useEffect(() => {
       if (coords) {
         onFetchWeatherByCoords({coords, key})
-
-        // axios
-        //   .get(`https://api.openweathermap.org/data/2.5/weather?lat=${coords.lat}&lon=${coords.lon}&appid=${key}&units=metric`)
-        //   .then(res => {
-        //     console.log(res.data, 'DATA')
-        //     setData(res.data)
-        //     setLoading(false)
-        //   })
-        //   .catch(err => 
-        //     setError({ 
-        //         msg: err.response ? err.response.data.message : err.message, 
-        //         query: null
-        //     })
-        //   )
       }
   }, [coords, onFetchWeatherByCoords])
 
@@ -65,7 +48,7 @@ function Home({ coords, onSetCoords, data, onFetchWeatherByCoords, loading, onSe
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         {error ? error.msg : null}
-        <Form searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} setError={setError} />
+        <Form searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} setError={setError} setLoading={onSetLoading} setData={onSetData} />
         {content}
       </header>
     </div>
@@ -82,6 +65,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    onSetLoading: (payload) => dispatch(actions.setLoading(payload)),
+    onSetData: (payload) => dispatch(actions.setData(payload)),
+    onFetchWeatherStart: () => dispatch(actions.fetchWeatherStart()),
     onSetCoords: (payload) => dispatch(actions.setCoords(payload)),
     onFetchWeatherByCoords: (payload) => dispatch(actions.fetchWeatherByCoords(payload))
   }

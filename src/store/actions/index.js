@@ -23,7 +23,6 @@ export const fetchWeatherFailure = (err) => {
 
 export const fetchWeatherByCoords = ({ coords, key }) => {
     return async (dispatch) => {
-        dispatch(fetchWeatherStart());
         axios
             .get(`https://api.openweathermap.org/data/2.5/weather?lat=${coords.lat}&lon=${coords.lon}&appid=${key}&units=metric`)
             .then(res => {
@@ -39,5 +38,19 @@ export const setCoords = (coords) => {
     return {
         type: actions.SET_COORDS,
         payload: coords
+    }
+}
+
+export const setData = (data) => {
+    return {
+        type: actions.SET_DATA,
+        payload: data
+    }
+}
+
+export const setLoading = (loading) => {
+    return {
+        type: actions.SET_LOADING,
+        payload: loading
     }
 }

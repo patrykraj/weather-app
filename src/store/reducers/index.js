@@ -37,6 +37,18 @@ const reducer = (state = initialState, action) => {
                     lon: action.payload.lon
                 }
             }
+            
+        case actions.SET_DATA:
+            return {
+                ...state,
+                weatherData: action.payload
+            }
+
+        case actions.SET_LOADING:
+            return {
+                ...state,
+                loading: action.payload
+            }
 
         default: {
             return {
