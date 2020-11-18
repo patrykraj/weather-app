@@ -13,10 +13,12 @@ function Forecast(props) {
     const [loading, setLoading] = useState(false)
     const [searchedQuery, setSearchedQuery] = useState('')
     const [error, setError] = useState(null)
+    
+    const name = props.match.params.id
 
-    useEffect(() => {   
-        const name = props.match.params.id
+    useEffect(() => {
         setLoading(true)
+        setError(null)
         
         axios
             .get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${name}&key=${key}`)
@@ -28,8 +30,9 @@ function Forecast(props) {
                 setError({
                     msg: err.message
                 })
+                setLoading(false)
             })
-    }, [props])
+    }, [name])
 
     let content;
     if(loading) content = <Loader />

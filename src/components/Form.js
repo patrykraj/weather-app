@@ -16,13 +16,13 @@ function Form({ setData, searchedQuery, setSearchedQuery, setError, setLoading, 
 
         if(searchedQuery.trim().length > 2) {
             setLoading(true)
+            setError(null)
 
             axios
                 .get(url)
                 .then(city => {
                     setSearchedQuery('')
                     setData(city.data)
-                    setError(null)
                     setLoading(false)
 
                     if(forecast) {
@@ -37,6 +37,10 @@ function Form({ setData, searchedQuery, setSearchedQuery, setError, setLoading, 
                     })
                     setLoading(false)
                 })
+        } else {
+            setError({
+                msg: 'Min. 3 characters'
+            })
         }
     }
  

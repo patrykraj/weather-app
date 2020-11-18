@@ -9,34 +9,30 @@ import Form from '../components/Form'
 import Loader from '../components/Loader'
 import CurrentWeather from '../components/weather/CurrentWeather'
 
-function Home({ onFetchWeatherStart, coords, onSetCoords, data, onSetData, onFetchWeatherByCoords, loading, onSetLoading }) {
+function Home({ onFetchWeatherStart, coords, onSetCoords, data, onSetData, onFetchWeatherByCoords, loading, onSetLoading, error, onSetError }) {
   const [searchedQuery, setSearchedQuery] = useState('')
-  const [error, setError] = useState(null)
 
   useEffect(() => {
-    if ("geolocation" in navigator) {
+    if ("geolocation" in navigator && !coords) {
       onFetchWeatherStart()
 
       navigator.geolocation.getCurrentPosition(function(position) {
-        onSetCoords({
-          lat: position.coords.latitude,
-          lon: position.coords.longitude
+        onFetchWeatherByCoords({
+          coords: {
+            lat: position.coords.latitude,
+            lon: position.coords.longitude
+          },
+          key
         })
       }, err => {
-        setError({
+        onSetError({
           msg: err.message
         })
       })
     } else {
       console.log("Not Available");
     }
-  }, [onSetCoords, onFetchWeatherStart])
-
-  useEffect(() => {
-      if (coords) {
-        onFetchWeatherByCoords({coords, key})
-      }
-  }, [coords, onFetchWeatherByCoords])
+  }, [onSetCoords, onFetchWeatherStart, onSetError, coords, onFetchWeatherByCoords])
 
   let content;
   if(loading) content = <Loader />
@@ -48,7 +44,7 @@ function Home({ onFetchWeatherStart, coords, onSetCoords, data, onSetData, onFet
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         {error ? error.msg : null}
-        <Form searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} setError={setError} setLoading={onSetLoading} setData={onSetData} />
+        <Form searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} setError={onSetError} setLoading={onSetLoading} setData={onSetData} />
         {content}
       </header>
     </div>
@@ -59,7 +55,8 @@ const mapStateToProps = state => {
   return {
     coords: state.coords,
     data: state.weatherData,
-    loading: state.loading
+    loading: state.loading,
+    error: state.error
   }
 }
 
@@ -69,7 +66,8 @@ const mapDispatchToProps = dispatch => {
     onSetData: (payload) => dispatch(actions.setData(payload)),
     onFetchWeatherStart: () => dispatch(actions.fetchWeatherStart()),
     onSetCoords: (payload) => dispatch(actions.setCoords(payload)),
-    onFetchWeatherByCoords: (payload) => dispatch(actions.fetchWeatherByCoords(payload))
+    onFetchWeatherByCoords: (payload) => dispatch(actions.fetchWeatherByCoords(payload)),
+    onSetError: (payload) => dispatch(actions.setError(payload))
   }
 }
 
