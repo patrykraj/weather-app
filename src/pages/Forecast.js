@@ -35,9 +35,9 @@ function Forecast(props) {
             <h1 className='title'>
                 <Link to='/'>Weather Forecast</Link>
             </h1>
+            {error ? <p>{error.msg}</p> : null}
             <Form forecast searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} />
             {content}
-            {error ? <p>{error.msg}</p> : null}
         </div>
     )
 }

@@ -7,13 +7,10 @@ export const fetchWeatherStart = () => {
     }
 }
 
-export const fetchWeatherSuccess = (data, coords) => {
+export const fetchWeatherSuccess = (data) => {
     return {
         type: actions.FETCH_WEATHER_SUCCESS,
-        payload: {
-            data,
-            coords
-        }
+        payload: data
     }
 }
 
@@ -24,16 +21,13 @@ export const fetchWeatherFailure = (err) => {
     }
 }
 
-export const fetchWeatherByCoords = ({ coords, key }) => {
-    return async (dispatch) => {
-        axios
-            .get(`https://api.openweathermap.org/data/2.5/weather?lat=${coords.lat}&lon=${coords.lon}&appid=${key}&units=metric`)
-            .then(res => {
-                dispatch(fetchWeatherSuccess(res.data, coords))
-            })
-            .catch(err => {
-                dispatch(fetchWeatherFailure(err.response ? err.response.data.message : err.message))
-            })
+export const fetchCoordsSuccess = (data, coords) => {
+    return {
+        type: actions.FETCH_COORDS_SUCCESS,
+        payload: {
+            data,
+            coords
+        }
     }
 }
 
@@ -41,34 +35,6 @@ export const setError = (err) => {
     return {
         type: actions.SET_ERROR,
         payload: err
-    }
-}
-
-export const setCoords = (coords) => {
-    return {
-        type: actions.SET_COORDS,
-        payload: coords
-    }
-}
-
-export const setData = (data) => {
-    return {
-        type: actions.SET_DATA,
-        payload: data
-    }
-}
-
-export const setForecastData = (data) => {
-    return {
-        type: actions.SET_FORECAST_DATA,
-        payload: data
-    }
-}
-
-export const setLoading = (loading) => {
-    return {
-        type: actions.SET_LOADING,
-        payload: loading
     }
 }
 
@@ -83,6 +49,19 @@ export const fetchForecastFailure = (err) => {
     return {
         type: actions.FETCH_WEATHER_FAILURE,
         payload: err
+    }
+}
+
+export const fetchWeatherByCoords = ({ coords, key }) => {
+    return async (dispatch) => {
+        axios
+            .get(`https://api.openweathermap.org/data/2.5/weather?lat=${coords.lat}&lon=${coords.lon}&appid=${key}&units=metric`)
+            .then(res => {
+                dispatch(fetchCoordsSuccess(res.data, coords))
+            })
+            .catch(err => {
+                dispatch(fetchWeatherFailure(err.response ? err.response.data.message : err.message))
+            })
     }
 }
 
@@ -101,20 +80,6 @@ export const fetchForecast = ({ name, key }) => {
     }
 }
 
-export const fetchWeatherByNameSuccess = (data, forecast) => {
-    return {
-        type: forecast ? actions.FETCH_FORECAST_SUCCESS : actions.FETCH_WEATHER_BY_NAME_SUCCESS,
-        payload: data
-    }
-}
-
-export const fetchWeatherByNameFailure = (err) => {
-    return {
-        type: actions.FETCH_WEATHER_BY_NAME_FAILURE,
-        payload: err
-    }
-}
-
 export const fetchWeatherByName = (forecast, url) => {
     return async dispatch => {
         dispatch(fetchWeatherStart())
@@ -122,17 +87,17 @@ export const fetchWeatherByName = (forecast, url) => {
         axios
             .get(url)
             .then(city => {
-                dispatch(fetchWeatherByNameSuccess(city.data, forecast))
-
                 if(forecast) {
+                    dispatch(fetchForecastSuccess(city.data))
+
                     var newurl = window.location.protocol + "//" + window.location.host + '/forecast/' + city.data.name;
                     window.history.pushState({path:newurl},'',newurl);
+                } else {
+                    dispatch(fetchWeatherSuccess(city.data))
                 }
             })
             .catch(err => {
-                dispatch(fetchWeatherByNameFailure({
-                    msg: err.response ? err.response.data.message : err.message
-                }))
+                dispatch(fetchWeatherFailure(err.response ? err.response.data.message : err.message))
             })
     }
 }

@@ -17,6 +17,7 @@ function Form({ searchedQuery, setSearchedQuery, onSetError, forecast, onFetchWe
 
         if(searchedQuery.trim().length > 2) {
             onFetchWeatherByName(forecast, url)
+            setSearchedQuery('')
         } else {
             onSetError({
                 msg: 'Min. 3 characters'

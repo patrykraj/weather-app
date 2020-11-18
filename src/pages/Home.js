@@ -9,7 +9,7 @@ import Form from '../components/Form'
 import Loader from '../components/Loader'
 import CurrentWeather from '../components/weather/CurrentWeather'
 
-function Home({ onFetchWeatherStart, coords, onSetCoords, data, onSetData, onFetchWeatherByCoords, loading, onSetLoading, error, onSetError }) {
+function Home({ onFetchWeatherStart, coords, data, onFetchWeatherByCoords, loading, error, onSetError }) {
   const [searchedQuery, setSearchedQuery] = useState('')
 
   useEffect(() => {
@@ -32,7 +32,7 @@ function Home({ onFetchWeatherStart, coords, onSetCoords, data, onSetData, onFet
     } else {
       console.log("Not Available");
     }
-  }, [onSetCoords, onFetchWeatherStart, onSetError, coords, onFetchWeatherByCoords])
+  }, [onFetchWeatherStart, onSetError, coords, onFetchWeatherByCoords])
 
   let content;
   if(loading) content = <Loader />
@@ -44,7 +44,7 @@ function Home({ onFetchWeatherStart, coords, onSetCoords, data, onSetData, onFet
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         {error ? error.msg : null}
-        <Form searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} setError={onSetError} setLoading={onSetLoading} setData={onSetData} />
+        <Form searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} />
         {content}
       </header>
     </div>
@@ -62,10 +62,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSetLoading: (payload) => dispatch(actions.setLoading(payload)),
-    onSetData: (payload) => dispatch(actions.setData(payload)),
     onFetchWeatherStart: () => dispatch(actions.fetchWeatherStart()),
-    onSetCoords: (payload) => dispatch(actions.setCoords(payload)),
     onFetchWeatherByCoords: (payload) => dispatch(actions.fetchWeatherByCoords(payload)),
     onSetError: (payload) => dispatch(actions.setError(payload))
   }
