@@ -19,3 +19,5 @@ const Container = styled.div`
 `
 
 export default Container;
+
+// 'linear-gradient(140deg, #141e30, #243b55)'

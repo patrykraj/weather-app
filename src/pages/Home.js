@@ -1,4 +1,3 @@
-import logo from '../logo.svg';
 import { useEffect, useState } from 'react';
 
 import { WEATHER_API_KEY as key } from '../assets/constants'
@@ -41,9 +40,9 @@ function Home({ onFetchWeatherStart, coords, data, onFetchWeatherByCoords, loadi
   return (
     <div className="App">
       <Container night={data && data.weather[0].icon.includes('n')}>
-        <img src={logo} className="App-logo" alt="logo" />
         {error ? error.msg : null}
         <Form searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} />
+        <img className='weather-icon' src={data ? `http://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png` : `http://openweathermap.org/img/wn/02d@4x.png`} alt="logo" />
         {content}
       </Container>
     </div>

@@ -9,8 +9,7 @@ function CurrentWeather({ data }) {
             <LinkButton to={`/forecast/${data.name}`} >Check 16 day forecast</LinkButton>
             <h1>{ConvertUnit(data.main.temp)}&deg;C</h1>
             <div>
-                <img src={`http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`} alt='weather-icon' />
-                <p>{data.weather[0].description}</p>
+                <p>{data.weather[0].main}</p>
                 <p>
                     <span>Max:</span><span>{ConvertUnit(data.main.temp_max)}&deg;</span>
                     <span>Min:</span><span>{ConvertUnit(data.main.temp_min)}&deg;</span>

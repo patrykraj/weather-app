@@ -73,11 +73,11 @@ const PageHeader = styled.header`
     text-transform: uppercase;
     margin: 2rem 0;
 
-        a {
-    text-transform: uppercase;
-    color: white;
-    background-color: rgba(255,255,255, .3);
-    padding: 5px 15px;
-    border-radius: 5px;
+    a {
+        text-transform: uppercase;
+        color: white;
+        background-color: rgba(255,255,255, .3);
+        padding: 5px 15px;
+        border-radius: 5px;
   }
 `

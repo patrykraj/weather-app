@@ -4,6 +4,8 @@ import { FORECAST_API_KEY as f_key } from '../assets/constants'
 import { connect } from "react-redux";
 import * as actions from '../store/actions'
 
+import styled from 'styled-components'
+
 function Form({ searchedQuery, setSearchedQuery, onSetError, forecast, onFetchWeatherByName }) {
 
     const handleSetQuery = (e) => {
@@ -27,8 +29,8 @@ function Form({ searchedQuery, setSearchedQuery, onSetError, forecast, onFetchWe
  
     return (
         <form onSubmit={handleSearchQuery}>  
-            <input type='text' value={searchedQuery} placeholder='City' onInput={handleSetQuery} pattern="[A-Za-z\s]+" title="Please use only letters"/>
-            <button type='submit'>Submit</button>
+            <Input type='text' value={searchedQuery} placeholder='City' onInput={handleSetQuery} pattern="[A-Za-z\s]+" title="Please use only letters"/>
+            <Submit type='submit'>Search</Submit>
         </form>
     )
 }
@@ -41,3 +43,33 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default connect(null, mapDispatchToProps)(Form)
+
+const Input = styled.input`
+    background: none;
+    font-size: 1.5rem;
+    border: none;
+    border-bottom: 2px solid #777;
+    padding: 5px 2px;
+    margin: 2px 5px;
+    color: white;
+    transition: all .3s;
+
+    &:focus {
+        outline: none;
+        border-bottom: 2px solid #eee;
+    }
+`
+
+const Submit = styled.button`
+    font-size: 1.4rem;
+    background: rgba(0,0,0,.1);
+    border: none;
+    border-radius: 10px;
+    color: #777;
+    cursor: pointer;
+    transition: all .3s;
+
+    &:hover {
+        color: #eee;
+    }
+`
