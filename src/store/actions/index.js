@@ -89,8 +89,8 @@ export const fetchWeatherByName = (forecast, url) => {
             .then(city => {
                 if(forecast) {
                     dispatch(fetchForecastSuccess(city.data))
-
-                    var newurl = window.location.protocol + "//" + window.location.host + '/forecast/' + city.data.name;
+                    
+                    var newurl = window.location.protocol + "//" + window.location.host + '/forecast/' + city.data.city_name;
                     window.history.pushState({path:newurl},'',newurl);
                 } else {
                     dispatch(fetchWeatherSuccess(city.data))
