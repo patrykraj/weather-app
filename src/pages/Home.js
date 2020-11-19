@@ -8,6 +8,7 @@ import * as actions from '../store/actions'
 import Form from '../components/Form'
 import Loader from '../components/Loader'
 import CurrentWeather from '../components/weather/CurrentWeather'
+import Container from '../components/styled/Container'
 
 function Home({ onFetchWeatherStart, coords, data, onFetchWeatherByCoords, loading, error, onFetchWeatherFailure }) {
   const [searchedQuery, setSearchedQuery] = useState('')
@@ -39,12 +40,12 @@ function Home({ onFetchWeatherStart, coords, data, onFetchWeatherByCoords, loadi
 
   return (
     <div className="App">
-      <header className="App-header">
+      <Container night={data && data.weather[0].icon.includes('n')}>
         <img src={logo} className="App-logo" alt="logo" />
         {error ? error.msg : null}
         <Form searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} />
         {content}
-      </header>
+      </Container>
     </div>
   );
 }

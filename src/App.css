@@ -4,34 +4,15 @@
   box-sizing: border-box;
 }
 
-.App {
-  text-align: center;
-}
-
 .App-logo {
   height: 40vmin;
   pointer-events: none;
-}
-
-span {
-  margin: 0 5px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
-
-.App-header, .Forecast {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-link {
@@ -44,92 +25,5 @@ span {
   }
   to {
     transform: rotate(360deg);
-  }
-}
-
-.title a {
-  text-transform: uppercase;
-  color: white;
-  background-color: rgba(255,255,255, .3);
-  padding: 5px 15px;
-  border-radius: 5px;
-}
-
-.forecast-link {
-  color: white;
-  background-color: rgba(255,255,255, .3);
-  padding: 5px 15px;
-  border-radius: 5px;
-}
-
-.day-list {
-  padding: 0;
-  margin: 0;
-  width: 80%;
-  max-width: 768px;
-}
-
-.day {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  background: rgba(255,255,255,.2);
-  margin: 10px 0;
-  padding: 0 1rem;
-}
-
-.day-temp {
-  display: flex;
-}
-
-.day-weather-icon {
-  max-height: 80px;
-}
-
-.loader {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  width: 80px;
-  height: 80px;
-  margin: 2rem 0;
-}
-
-.loader-circle {
-  position: absolute;
-  border: 5px solid white;
-  border-radius: 50%;
-  width: 100%;
-  height: 100%;
-  animation: grow 2s linear infinite;
-  opacity: 0;
-}
-
-.loader-circle:nth-child(1) {
-  animation-delay: 660ms;
-}
-
-.loader-circle:nth-child(2) {
-  animation-delay: 1320ms;
-}
-
-.loader-caption {
-  position: absolute;
-  top: 70px;
-  left: -10px;
-  font-size: 25px;
-}
-
-@keyframes grow {
-  0% {
-    transform: scale(0);
-    opacity: 1;
-  }
-
-  100% {
-    transform: scale(1);
-    opacity: 0;
   }
 }

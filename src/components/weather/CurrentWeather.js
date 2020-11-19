@@ -1,11 +1,12 @@
-import { Link } from 'react-router-dom'
 import { ConvertUnit, ConvertDate } from '../../assets/conversion'
+
+import LinkButton from '../LinkButton'
 
 function CurrentWeather({ data }) {
     return (
         <>
             <h2>{data.name}, {data.sys.country}</h2>
-            <Link to={`/forecast/${data.name}`} className='forecast-link'>Check 16 day forecast</Link>
+            <LinkButton to={`/forecast/${data.name}`} >Check 16 day forecast</LinkButton>
             <h1>{ConvertUnit(data.main.temp)}&deg;C</h1>
             <div>
                 <img src={`http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`} alt='weather-icon' />
