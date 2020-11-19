@@ -9,11 +9,11 @@ import Form from '../components/Form'
 import Loader from '../components/Loader'
 import CurrentWeather from '../components/weather/CurrentWeather'
 
-function Home({ onFetchWeatherStart, coords, data, onFetchWeatherByCoords, loading, error, onSetError }) {
+function Home({ onFetchWeatherStart, coords, data, onFetchWeatherByCoords, loading, error, onFetchWeatherFailure }) {
   const [searchedQuery, setSearchedQuery] = useState('')
 
   useEffect(() => {
-    if ("geolocation" in navigator && !coords) {
+    if ("geolocation" in navigator && !coords && !data) {
       onFetchWeatherStart()
 
       navigator.geolocation.getCurrentPosition(function(position) {
@@ -25,14 +25,12 @@ function Home({ onFetchWeatherStart, coords, data, onFetchWeatherByCoords, loadi
           key
         })
       }, err => {
-        onSetError({
-          msg: err.message
-        })
+        onFetchWeatherFailure(err.message)
       })
     } else {
       console.log("Not Available");
     }
-  }, [onFetchWeatherStart, onSetError, coords, onFetchWeatherByCoords])
+  }, [onFetchWeatherStart, onFetchWeatherFailure, coords, data, onFetchWeatherByCoords])
 
   let content;
   if(loading) content = <Loader />
@@ -64,7 +62,7 @@ const mapDispatchToProps = dispatch => {
   return {
     onFetchWeatherStart: () => dispatch(actions.fetchWeatherStart()),
     onFetchWeatherByCoords: (payload) => dispatch(actions.fetchWeatherByCoords(payload)),
-    onSetError: (payload) => dispatch(actions.setError(payload))
+    onFetchWeatherFailure: (payload) => dispatch(actions.fetchWeatherFailure(payload))
   }
 }
 
