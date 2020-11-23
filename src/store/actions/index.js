@@ -118,3 +118,39 @@ export const fetchForecastAuto = (name, key) => {
             })
     }
 }
+
+export const fetchSearchListStart = () => {
+    return {
+        type: actions.FETCH_SEARCH_LIST_START
+    }
+}
+
+export const fetchSearchListSuccess = (data) => {
+    return {
+        type: actions.FETCH_SEARCH_LIST_SUCCESS,
+        payload: data
+    }
+}
+
+export const fetchSearchListFailure = () => {
+    return {
+        type: actions.FETCH_SEARCH_LIST_FAILURE
+    }
+}
+
+export const fetchSearchList = (query) => {
+    return async dispatch => {
+        if(query.trim().length > 2) {
+            dispatch(fetchSearchListStart())
+
+            axios
+            .get(`https://public.opendatasoft.com/api/records/1.0/search/?dataset=worldcitiespop&q=${query}&rows=5&sort=population`)
+            .then(res => {
+                dispatch(fetchSearchListSuccess(res.data.records))
+            })
+            .catch(err => {
+                dispatch(fetchSearchListFailure())
+            })
+        } else dispatch(fetchSearchListFailure())
+    }
+}

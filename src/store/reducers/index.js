@@ -5,7 +5,9 @@ const initialState = {
     coords: null,
     weatherData: null,
     forecastData: null,
-    error: null
+    error: null,
+    searchListData: null,
+    searchListLoading: false,
 }
 
 const reducer = (state = initialState, action) => {
@@ -21,7 +23,8 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                weatherData: action.payload
+                weatherData: action.payload,
+                searchListData: null
             }
 
         case actions.FETCH_WEATHER_FAILURE:
@@ -30,7 +33,8 @@ const reducer = (state = initialState, action) => {
                 loading: false,
                 error: {
                     msg: action.payload
-                }
+                },
+                searchListData: null
             }
 
         case actions.FETCH_COORDS_SUCCESS:
@@ -45,7 +49,8 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                forecastData: action.payload
+                forecastData: action.payload,
+                searchListData: null
             }
 
         case actions.FETCH_FORECAST_FAILURE:
@@ -54,13 +59,34 @@ const reducer = (state = initialState, action) => {
                 loading: false,
                 error: {
                     msg: action.payload
-                }
+                },
+                searchListData: null
             }
 
         case actions.SET_ERROR:
             return {
                 ...state,
                 error: action.payload
+            }
+
+        case actions.FETCH_SEARCH_LIST_START:
+            return {
+                ...state,
+                searchListLoading: true,
+            }
+
+        case actions.FETCH_SEARCH_LIST_SUCCESS:
+            return {
+                ...state,
+                searchListLoading: false,
+                searchListData: action.payload
+            }
+
+        case actions.FETCH_SEARCH_LIST_FAILURE:
+            return {
+                ...state,
+                searchListLoading: false,
+                searchListData: null
             }
 
         default: {
