@@ -138,6 +138,12 @@ export const fetchSearchListFailure = () => {
     }
 }
 
+export const resetSearchList = () => {
+    return {
+        type: actions.FETCH_SEARCH_LIST_FAILURE
+    }
+}
+
 export const fetchSearchList = (query) => {
     return async dispatch => {
         if(query.trim().length > 2) {

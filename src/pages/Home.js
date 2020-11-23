@@ -9,7 +9,7 @@ import Loader from '../components/Loader'
 import CurrentWeather from '../components/weather/CurrentWeather'
 import Container from '../components/styled/Container'
 
-function Home({ onFetchWeatherStart, coords, data, onFetchWeatherByCoords, loading, error, onFetchWeatherFailure }) {
+function Home({ onFetchWeatherStart, coords, data, onFetchWeatherByCoords, loading, error, onFetchWeatherFailure, onResetSearchList }) {
   const [searchedQuery, setSearchedQuery] = useState('')
 
   useEffect(() => {
@@ -39,7 +39,7 @@ function Home({ onFetchWeatherStart, coords, data, onFetchWeatherByCoords, loadi
 
   return (
     <div className="App">
-      <Container night={data && data.weather[0].icon.includes('n')}>
+      <Container night={data && data.weather[0].icon.includes('n')} onClick={onResetSearchList}>
         {error ? error.msg : null}
         <Form searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} />
         <img className='weather-icon' src={data ? `http://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png` : `http://openweathermap.org/img/wn/02d@4x.png`} alt="logo" />
@@ -62,7 +62,8 @@ const mapDispatchToProps = dispatch => {
   return {
     onFetchWeatherStart: () => dispatch(actions.fetchWeatherStart()),
     onFetchWeatherByCoords: (payload) => dispatch(actions.fetchWeatherByCoords(payload)),
-    onFetchWeatherFailure: (payload) => dispatch(actions.fetchWeatherFailure(payload))
+    onFetchWeatherFailure: (payload) => dispatch(actions.fetchWeatherFailure(payload)),
+    onResetSearchList: () => dispatch(actions.resetSearchList())
   }
 }
 

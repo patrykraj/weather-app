@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import SearchList from '../components/SearchList'
 
 function Form({ searchedQuery, setSearchedQuery, onSetError, forecast, onFetchWeatherByName, list, loading, onFetchSearchList }) {
+    
     const handleSetQuery = (e) => {
         if (!/^[a-zA-Z\s]*$/g.test(e.target.value)) return;
         setSearchedQuery(e.target.value);
