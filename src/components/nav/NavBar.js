@@ -9,10 +9,10 @@ function NavBar({ city }) {
                     <Link to='/'>Today</Link>
                 </li>
                 <li>
-                    <Link to={city ? `/week/${city}` : '/'}>Week</Link>
+                    <Link to={city ? `/hourly/${city}` : '/'}>Hourly</Link>
                 </li>
                 <li>
-                    <Link to={city ? `/month/${city}` : '/'}>Month</Link>
+                    <Link to={city ? `/forecast/${city}` : '/'}>Week</Link>
                 </li>
             </ul>
         </Nav>

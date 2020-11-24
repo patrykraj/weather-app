@@ -160,3 +160,26 @@ export const fetchSearchList = (query) => {
         } else dispatch(fetchSearchListFailure())
     }
 }
+
+
+// export const fetchCoordsByName = (name, key) => {
+//     return async dispatch => {
+//         dispatch(fetchWeatherStart())
+
+//         axios
+//             .get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${name}&key=${f_key}`)
+//             .then(res => {
+//                 console.log(res.data)
+
+//                 axios
+//                     .get(`https://api.openweathermap.org/data/2.5/onecall?lat=${res.data.lat}&lon=${res.data.lon}&exclude=current,minutely,daily&appid=${w_key}&units=metric`)
+//                     .then(data => {
+//                         console.log(data, 'Z NAZWY')
+//                         setHourData(data)
+//                     })
+//             })
+//             .catch(err => {
+//                 console.log(err, 'ERRORRRRR')
+//             })
+//     }
+// }

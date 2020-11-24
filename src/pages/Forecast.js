@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import styled from 'styled-components'
 
 import * as actions from '../store/actions'
-import { connect } from "react-redux";
+import { connect } from "react-redux"
 
 import { FORECAST_API_KEY as key } from '../assets/constants'
 
@@ -12,8 +12,8 @@ import Loader from '../components/Loader'
 import Container from '../components/styled/Container'
 import NavBar from '../components/nav/NavBar'
 
-function Week(props) {
-    const [ searchedQuery, setSearchedQuery ] = useState('')
+function Forecast(props) {
+    const [searchedQuery, setSearchedQuery] = useState('')
     
     const { onFetchForecastAuto, onResetSearchList,loading, data, error } = props
     const name = props.match.params.id
@@ -28,7 +28,7 @@ function Week(props) {
     else content = <>
         <h1>{data.city_name}, {data.country_code}:</h1>
         <DayList>
-            {data.data.slice(0,7).map(day => <Day key={day.datetime} weather={day.weather.icon} date={day.datetime.slice(-5,day.datetime.length)} max_temp={day.max_temp} low_temp={day.min_temp} pop={day.pop} />)}
+            {data.data.map(day => <Day key={day.datetime} weather={day.weather.icon} date={day.datetime.slice(-5, day.datetime.length)} max_temp={day.max_temp} low_temp={day.min_temp} pop={day.pop} />)}
         </DayList>
     </>
 
@@ -58,7 +58,7 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Week)
+export default connect(mapStateToProps, mapDispatchToProps)(Forecast)
 
 const DayList = styled.ul`
     padding: 0;

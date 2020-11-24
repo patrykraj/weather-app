@@ -6,7 +6,7 @@ import * as actions from '../store/actions'
 
 import Form from '../components/Form'
 import Loader from '../components/Loader'
-import CurrentWeather from '../components/weather/CurrentWeather'
+import CurrentWeather from '../components/current/CurrentWeather'
 import Container from '../components/styled/Container'
 import NavBar from '../components/nav/NavBar'
 

@@ -1,7 +1,7 @@
 import './App.css';
 import Home from './pages/Home'
-import Week from './pages/Week'
-import Month from './pages/Month'
+import Forecast from './pages/Forecast'
+import Hourly from './pages/Hourly'
 
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 
@@ -14,8 +14,8 @@ function App() {
       <Router basename={process.env.PUBLIC_URL}>
         <Switch>
           <Route path="/" exact component={Home} />
-          <Route path="/week/:id" component={Week} />
-          <Route path="/month/:id" component={Month} />
+          <Route path="/hourly/:id" component={Hourly} />
+          <Route path="/forecast/:id" component={Forecast} />
           <Redirect to='/' />
         </Switch>
       </Router>
