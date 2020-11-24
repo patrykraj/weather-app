@@ -9,7 +9,7 @@ const Container = styled.div`
     justify-content: center;
     font-size: calc(10px + 2vmin);
     color: white;
-    padding: 2rem 0;
+    padding: 4rem 0;
     text-align: center;
     transition: 1s all;
 

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import * as actions from '../store/actions'
@@ -11,11 +10,12 @@ import Form from '../components/Form'
 import Day from '../components/forecast/Day'
 import Loader from '../components/Loader'
 import Container from '../components/styled/Container'
+import NavBar from '../components/nav/NavBar'
 
-function Forecast(props) {
-    const [searchedQuery, setSearchedQuery] = useState('')
+function Week(props) {
+    const [ searchedQuery, setSearchedQuery ] = useState('')
     
-    const { onFetchForecastAuto, loading, data, error } = props
+    const { onFetchForecastAuto, onResetSearchList,loading, data, error } = props
     const name = props.match.params.id
 
     useEffect(() => {
@@ -28,15 +28,13 @@ function Forecast(props) {
     else content = <>
         <h1>{data.city_name}, {data.country_code}:</h1>
         <DayList>
-            {data.data.map(day => <Day key={day.datetime} weather={day.weather.icon} date={day.datetime.slice(-5,day.datetime.length)} max_temp={day.max_temp} low_temp={day.min_temp} pop={day.pop} />)}
+            {data.data.slice(0,7).map(day => <Day key={day.datetime} weather={day.weather.icon} date={day.datetime.slice(-5,day.datetime.length)} max_temp={day.max_temp} low_temp={day.min_temp} pop={day.pop} />)}
         </DayList>
     </>
 
     return (
-        <Container >
-            <PageHeader>
-                <Link to='/'>Weather Forecast</Link>
-            </PageHeader>
+        <Container onClick={onResetSearchList}>
+            <NavBar city={name} />
             {error ? <p>{error.msg}</p> : null}
             <Form forecast searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} />
             {content}
@@ -55,29 +53,16 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchForecastAuto: (name, key) => dispatch(actions.fetchForecastAuto(name, key))
+        onFetchForecastAuto: (name, key) => dispatch(actions.fetchForecastAuto(name, key)),
+        onResetSearchList: () => dispatch(actions.resetSearchList())
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Forecast)
+export default connect(mapStateToProps, mapDispatchToProps)(Week)
 
 const DayList = styled.ul`
     padding: 0;
     margin: 0;
     width: 80%;
     max-width: 768px;
-`
-const PageHeader = styled.header`
-    font-size: 3rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    margin: 2rem 0;
-
-    a {
-        text-transform: uppercase;
-        color: white;
-        background-color: rgba(255,255,255, .3);
-        padding: 5px 15px;
-        border-radius: 5px;
-  }
 `
