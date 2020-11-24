@@ -4,7 +4,7 @@ function Hour({ data }) {
     console.log(data, 'DATA HOUR')
     return (
         <List>
-            {data && data.data.hourly.map(hour => 
+            {data && data.hourly.map(hour => 
                 <ListItem key={hour.dt}>
                     <span className='date'>
                         <p className='date-hour'>{new Date(hour.dt * 1000).getHours()}</p>

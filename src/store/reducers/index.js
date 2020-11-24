@@ -5,6 +5,7 @@ const initialState = {
     coords: null,
     weatherData: null,
     forecastData: null,
+    hourlyData: null,
     error: null,
     searchListData: null,
     searchListLoading: false,
@@ -87,6 +88,21 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 searchListLoading: false,
                 searchListData: null
+            }
+
+        case actions.FETCH_HOURLY_BY_NAME_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                error: null,
+                hourlyData: action.payload
+            }
+
+        case actions.FETCH_HOURLY_BY_NAME_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload
             }
 
         default: {

@@ -1,43 +1,37 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 import { WEATHER_API_KEY as w_key } from '../assets/constants'
 import { FORECAST_API_KEY as f_key } from '../assets/constants'
 
-import axios from 'axios'
 import { connect } from "react-redux";
 import * as actions from '../store/actions'
 
 import NavBar from '../components/nav/NavBar'
 import Container from '../components/styled/Container'
 import Hours from '../components/forecast/Hours'
+import Loader from '../components/Loader'
 
 function Hourly(props) {
-    const [hourData, setHourData] = useState(null)
-    const {data} = props
+    const {data, loading, error, hourlyData, onFetchHourlyByName} = props
     const name = props.match.params.id
 
     useEffect(() => {
-        axios
-            .get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${name}&key=${f_key}`)
-            .then(res => {
+        onFetchHourlyByName(name, f_key, w_key)
+    }, [onFetchHourlyByName, name])
 
-                axios
-                    .get(`https://api.openweathermap.org/data/2.5/onecall?lat=${res.data.lat}&lon=${res.data.lon}&exclude=current,minutely,daily&appid=${w_key}&units=metric`)
-                    .then(data => {
-                        setHourData(data)
-                    })
-            })
-            .catch(err => {
-                console.log(err, 'ERROR')
-            })
-    }, [name])
+    let content;
+    if(loading) content = <Loader />
+    else if (error) content = <p>{error}</p>
+    else content = <>
+                    <p>Hourly forecast for</p>
+                    <h2>{name}</h2>
+                    <Hours data={hourlyData} />
+                </>
 
     return (
         <Container>
             <NavBar city={data && data.name} />
-            <h1>HOURLY</h1>
-            <h2>forecast for {name}</h2>
-            <Hours data={hourData} />
+            {content}
         </Container>
     )
 }
@@ -45,13 +39,15 @@ function Hourly(props) {
 const mapStateToProps = state => {
     return {
       data: state.weatherData,
+      hourlyData: state.hourlyData,
+      loading: state.loading,
+      error: state.error
     }
   }
   
-
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchWeatherByName: (forecast, url) => dispatch(actions.fetchWeatherByName(forecast, url)),
+        onFetchHourlyByName: (name, f_key, w_key) => dispatch(actions.fetchHourlyByName(name, f_key, w_key))
     }
 }
 

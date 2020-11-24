@@ -161,25 +161,40 @@ export const fetchSearchList = (query) => {
     }
 }
 
+export const fetchHourlyByNameSuccess = (data) => {
+    return {
+        type: actions.FETCH_HOURLY_BY_NAME_SUCCESS,
+        payload: data
+    }
+}
 
-// export const fetchCoordsByName = (name, key) => {
-//     return async dispatch => {
-//         dispatch(fetchWeatherStart())
+export const fetchHourlyByNameFailure = (err) => {
+    return {
+        type: actions.FETCH_HOURLY_BY_NAME_FAILURE,
+        payload: err
+    }
+}
 
-//         axios
-//             .get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${name}&key=${f_key}`)
-//             .then(res => {
-//                 console.log(res.data)
+export const fetchHourlyByName = (name, f_key, w_key) => {
+    return async dispatch => {
+        dispatch(fetchWeatherStart())
 
-//                 axios
-//                     .get(`https://api.openweathermap.org/data/2.5/onecall?lat=${res.data.lat}&lon=${res.data.lon}&exclude=current,minutely,daily&appid=${w_key}&units=metric`)
-//                     .then(data => {
-//                         console.log(data, 'Z NAZWY')
-//                         setHourData(data)
-//                     })
-//             })
-//             .catch(err => {
-//                 console.log(err, 'ERRORRRRR')
-//             })
-//     }
-// }
+        axios
+            .get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${name}&key=${f_key}`)
+            .then(res => {
+                
+                axios
+                    .get(`https://api.openweathermap.org/data/2.5/onecall?lat=${res.data.lat}&lon=${res.data.lon}&exclude=current,minutely,daily&appid=${w_key}&units=metric`)
+                    .then(res => {
+                        dispatch(fetchHourlyByNameSuccess(res.data))
+                    })
+                    .catch(err => {
+                        dispatch(fetchHourlyByNameFailure(err.response ? err.response.message : err.message))
+                    })
+
+            })
+            .catch(err => {
+                dispatch(fetchHourlyByNameFailure(err.response ? err.response.message : err.message))
+            })
+    }
+}
