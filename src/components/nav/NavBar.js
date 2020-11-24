@@ -1,19 +1,31 @@
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 
 function NavBar({ city }) {
+    const links = [
+        {
+            name: 'today',
+            to: '/'
+        },
+        {
+            name: 'hourly',
+            to: `/hourly/${city}`
+        },
+        {
+            name: 'forecast',
+            to: `/forecast/${city}`
+        }
+    ]
+
     return (
         <Nav>
             <ul>
-                <li>
-                    <Link to='/'>Today</Link>
-                </li>
-                <li>
-                    <Link to={city ? `/hourly/${city}` : '/'}>Hourly</Link>
-                </li>
-                <li>
-                    <Link to={city ? `/forecast/${city}` : '/'}>Week</Link>
-                </li>
+                {links.map(link => 
+                    <li key={link.name}>
+                        <NavLink exact activeClassName='active' to={link.to}>
+                            {link.name}
+                        </NavLink>
+                    </li>)}
             </ul>
         </Nav>
     )
@@ -39,8 +51,18 @@ const Nav = styled.nav`
         padding: 0;
 
         a {
-            color: #eee;
+            color: #ccc;
             text-decoration: none;
+            text-transform: capitalize;
+            transition: all .2s;
+
+            &:hover {
+                color: #fff;
+            }
+
+            &.active {
+                color: #fff;
+            }
         }
     }
 `

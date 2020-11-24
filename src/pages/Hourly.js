@@ -12,7 +12,7 @@ import Hours from '../components/forecast/Hours'
 import Loader from '../components/Loader'
 
 function Hourly(props) {
-    const {data, loading, error, hourlyData, onFetchHourlyByName} = props
+    const {loading, error, data, onFetchHourlyByName} = props
     const name = props.match.params.id
 
     useEffect(() => {
@@ -21,16 +21,17 @@ function Hourly(props) {
 
     let content;
     if(loading) content = <Loader />
-    else if (error) content = <p>{error}</p>
+    else if (!loading && !data) content = <h1>Select location</h1>
     else content = <>
                     <p>Hourly forecast for</p>
-                    <h2>{name}</h2>
-                    <Hours data={hourlyData} />
+                    <h2>{data.city_name}, {data.country_code}</h2>
+                    <Hours data={data} />
                 </>
 
     return (
         <Container>
-            <NavBar city={data && data.name} />
+            <NavBar city={name} />
+            {error ? <p>{error.msg}</p> : null}
             {content}
         </Container>
     )
@@ -38,8 +39,7 @@ function Hourly(props) {
 
 const mapStateToProps = state => {
     return {
-      data: state.weatherData,
-      hourlyData: state.hourlyData,
+      data: state.hourlyData,
       loading: state.loading,
       error: state.error
     }

@@ -185,16 +185,24 @@ export const fetchHourlyByName = (name, f_key, w_key) => {
                 
                 axios
                     .get(`https://api.openweathermap.org/data/2.5/onecall?lat=${res.data.lat}&lon=${res.data.lon}&exclude=current,minutely,daily&appid=${w_key}&units=metric`)
-                    .then(res => {
-                        dispatch(fetchHourlyByNameSuccess(res.data))
+                    .then(data => {
+                        let result = data.data
+
+                        result = {
+                            ...result,
+                            city_name: res.data.city_name,
+                            country_code: res.data.country_code
+                        }
+
+                        dispatch(fetchHourlyByNameSuccess(result))
                     })
                     .catch(err => {
-                        dispatch(fetchHourlyByNameFailure(err.response ? err.response.message : err.message))
+                        dispatch(fetchHourlyByNameFailure('City not found'))
                     })
 
             })
             .catch(err => {
-                dispatch(fetchHourlyByNameFailure(err.response ? err.response.message : err.message))
+                dispatch(fetchHourlyByNameFailure(err.response ? err.response.data.message : err.message))
             })
     }
 }

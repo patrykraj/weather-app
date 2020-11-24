@@ -102,7 +102,9 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                error: action.payload
+                error: {
+                    msg: action.payload
+                }
             }
 
         default: {

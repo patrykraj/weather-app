@@ -1,25 +1,35 @@
 import styled from 'styled-components'
 
-function Hour({ data }) {
-    console.log(data, 'DATA HOUR')
+import { ConvertDate } from '../../assets/conversion'
+
+function Hours({ data }) {
     return (
         <List>
-            {data && data.hourly.map(hour => 
+            {data && data.hourly.map(hour => {
+                const date = ConvertDate(hour.dt, data.timezone_offset, false, true)
+
+                return (
                 <ListItem key={hour.dt}>
                     <span className='date'>
-                        <p className='date-hour'>{new Date(hour.dt * 1000).getHours()}</p>
-                        <p className='date-day'>{new Date(hour.dt * 1000).getDate()}.{new Date(hour.dt * 1000).getMonth()}</p>
+                        <p className='date-hour'>
+                            {date.getUTCHours()}
+                        </p>
+                        <p className='date-day'>
+                            {date.getUTCDay()}.{date.getUTCMonth()}
+                        </p>
                     </span> 
                     <WeatherIcon src={`http://openweathermap.org/img/wn/${hour.weather[0].icon}@4x.png`} alt='weather_icon'/> 
-                    <span>{hour.temp.toFixed()}&deg;C</span> 
+                    <span>{Number(hour.temp.toFixed()) === 0 ? 0 : hour.temp.toFixed()}&deg;C</span> 
                     <span>Clouds: {hour.clouds}%</span> 
-                    <span>POP: {hour.pop}%</span>
-                </ListItem>)}
+                    <span>POP: {(hour.pop * 100).toFixed()}%</span>
+                </ListItem>
+                )}
+            )}
         </List>
     )
 }
 
-export default Hour
+export default Hours
 
 const List = styled.ul`
     margin: 0;
