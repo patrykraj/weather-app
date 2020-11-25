@@ -34,7 +34,7 @@ function NavBar({ city }) {
 export default NavBar
 
 const Nav = styled.nav`
-    background: rgba(255, 255, 255, .2);
+    background: rgba(255, 255, 255, .1);
     width: 80%;
     max-width: 1024px;
     position: fixed;
@@ -42,6 +42,11 @@ const Nav = styled.nav`
     top: 0;
     padding: 5px 0;
     border-radius: 0 0 15px 15px;
+    transition: all .3s;
+
+    &.shade {
+        background: rgba(36, 59, 85, .8);
+    }
 
     ul {
         display: flex;

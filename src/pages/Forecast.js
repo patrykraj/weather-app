@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import styled from 'styled-components'
 
 import * as actions from '../store/actions'
 import { connect } from "react-redux"
@@ -7,7 +6,7 @@ import { connect } from "react-redux"
 import { FORECAST_API_KEY as key } from '../assets/constants'
 
 import Form from '../components/Form'
-import Day from '../components/forecast/Day'
+import Days from '../components/forecast/Days'
 import Loader from '../components/Loader'
 import Container from '../components/styled/Container'
 import NavBar from '../components/nav/NavBar'
@@ -26,12 +25,12 @@ function Forecast(props) {
     let content;
     if(loading) content = <Loader />
     else if(!data && !loading) content = <h1>Select location</h1>
-    else content = <>
-        <h1>{data.city_name}, {data.country_code}:</h1>
-        <DayList>
-            {data.data.map(day => <Day key={day.datetime} weather={day.weather.icon} date={day.datetime.slice(-5, day.datetime.length)} max_temp={day.max_temp} low_temp={day.min_temp} pop={day.pop} />)}
-        </DayList>
-    </>
+    else content = (
+        <>
+            <h1>{data.city_name}, {data.country_code}:</h1>
+            <Days data={data.data} />
+        </>
+    )
 
     return (
         <Container onClick={onResetSearchList}>
@@ -60,10 +59,3 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Forecast)
-
-const DayList = styled.ul`
-    padding: 0;
-    margin: 0;
-    width: 80%;
-    max-width: 768px;
-`

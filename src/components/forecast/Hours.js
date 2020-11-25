@@ -39,6 +39,10 @@ const List = styled.ul`
     max-width: 1024px;
     border-radius: 15px;
     overflow: hidden;
+
+    @media(max-width: 600px) {
+        width: 95%;
+    }
 `
 
 const ListItem = styled.li`
@@ -63,4 +67,5 @@ const ListItem = styled.li`
 `
 const WeatherIcon = styled.img`
     width: 11%;
+    min-width: 66px;
 `
