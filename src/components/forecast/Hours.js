@@ -15,7 +15,7 @@ function Hours({ data }) {
                             {date.getUTCHours()}
                         </p>
                         <p className='date-day'>
-                            {date.getUTCDay()}.{date.getUTCMonth()}
+                            {date.getUTCDate()}.{date.getUTCMonth() + 1}
                         </p>
                     </span> 
                     <WeatherIcon src={`http://openweathermap.org/img/wn/${hour.weather[0].icon}@4x.png`} alt='weather_icon'/> 

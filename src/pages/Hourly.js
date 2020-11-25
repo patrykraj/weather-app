@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { WEATHER_API_KEY as w_key } from '../assets/constants'
 import { FORECAST_API_KEY as f_key } from '../assets/constants'
@@ -10,8 +10,11 @@ import NavBar from '../components/nav/NavBar'
 import Container from '../components/styled/Container'
 import Hours from '../components/forecast/Hours'
 import Loader from '../components/Loader'
+import Form from '../components/Form'
+import Error from '../components/Error'
 
 function Hourly(props) {
+    const [searchedQuery, setSearchedQuery] = useState('')
     const {loading, error, data, onFetchHourlyByName} = props
     const name = props.match.params.id
 
@@ -22,16 +25,19 @@ function Hourly(props) {
     let content;
     if(loading) content = <Loader />
     else if (!loading && !data) content = <h1>Select location</h1>
-    else content = <>
+    else content = (
+                <>
+                    <Form hourly searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} />
                     <p>Hourly forecast for</p>
                     <h2>{data.city_name}, {data.country_code}</h2>
                     <Hours data={data} />
                 </>
+    )
 
     return (
         <Container>
             <NavBar city={name} />
-            {error ? <p>{error.msg}</p> : null}
+            {error ? <Error err={error.msg} /> : null}
             {content}
         </Container>
     )

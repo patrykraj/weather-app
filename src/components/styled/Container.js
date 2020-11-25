@@ -12,6 +12,7 @@ const Container = styled.div`
     padding: 4rem 0;
     text-align: center;
     transition: 1s all;
+    overflow: hidden;
 
     span {
         margin: 0 5px;

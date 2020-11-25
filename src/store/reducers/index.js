@@ -95,7 +95,8 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 error: null,
-                hourlyData: action.payload
+                hourlyData: action.payload,
+                searchListData: null
             }
 
         case actions.FETCH_HOURLY_BY_NAME_FAILURE:
@@ -104,7 +105,8 @@ const reducer = (state = initialState, action) => {
                 loading: false,
                 error: {
                     msg: action.payload
-                }
+                },
+                searchListData: null
             }
 
         default: {

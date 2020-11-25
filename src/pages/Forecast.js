@@ -11,6 +11,7 @@ import Day from '../components/forecast/Day'
 import Loader from '../components/Loader'
 import Container from '../components/styled/Container'
 import NavBar from '../components/nav/NavBar'
+import Error from '../components/Error'
 
 function Forecast(props) {
     const [searchedQuery, setSearchedQuery] = useState('')
@@ -35,7 +36,7 @@ function Forecast(props) {
     return (
         <Container onClick={onResetSearchList}>
             <NavBar city={name} />
-            {error ? <p>{error.msg}</p> : null}
+            {error ? <Error err={error.msg} /> : null}
             <Form forecast searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} />
             {content}
         </Container>

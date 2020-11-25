@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import styled from 'styled-components'
 
 import { WEATHER_API_KEY as key } from '../assets/constants'
 import { connect } from "react-redux";
@@ -9,6 +10,7 @@ import Loader from '../components/Loader'
 import CurrentWeather from '../components/current/CurrentWeather'
 import Container from '../components/styled/Container'
 import NavBar from '../components/nav/NavBar'
+import Error from '../components/Error'
 
 function Home({ onFetchWeatherStart, coords, data, onFetchWeatherByCoords, loading, error, onFetchWeatherFailure, onResetSearchList }) {
   const [searchedQuery, setSearchedQuery] = useState('')
@@ -40,9 +42,9 @@ function Home({ onFetchWeatherStart, coords, data, onFetchWeatherByCoords, loadi
     <div className="App">
       <Container night={data && data.weather[0].icon.includes('n')} onClick={onResetSearchList}>
         <NavBar city={data && data.name} />
-        {error ? error.msg : null}
+        {error ? <Error err={error.msg} /> : null}
         <Form searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} />
-        <img className='weather-icon' src={data ? `http://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png` : `http://openweathermap.org/img/wn/02d@4x.png`} alt="logo" />
+        <WeatherIcon src={data ? `http://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png` : `http://openweathermap.org/img/wn/02d@4x.png`} alt="weather-icon" />
         {content}
       </Container>
     </div>
@@ -68,3 +70,33 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
+
+
+const WeatherIcon = styled.img`
+  margin: 10px 0;
+  transform: scale(1) translate(-15px, -15px);
+  animation: move 30s infinite linear;
+  max-width: 70%;
+
+  @keyframes move {
+    0% {
+      transform: scale(1) translate(0, -15px);
+    }
+
+    25% {
+      transform: scale(1.25) translate(15px, 0);
+    }
+
+    50% {
+      transform: scale(1.5) translate(0, 15px);
+    }
+    
+    75% {
+      transform: scale(1.25) translate(-15px, 0);
+    }
+
+    100% {
+      transform: scale(1) translate(0, -15px);
+    }
+  }
+`
