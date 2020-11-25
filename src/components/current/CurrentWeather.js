@@ -6,7 +6,7 @@ function CurrentWeather({ data }) {
     return (
         <>
             <h2>{data.name}, {data.sys.country}</h2>
-            <LinkButton to={`/week/${data.name}`} >Check 7 day forecast</LinkButton>
+            <LinkButton to={`/week/${data.name}`} >Check 16 day forecast</LinkButton>
             <h1>{ConvertUnit(data.main.temp)}&deg;C</h1>
             <div>
                 <p>{data.weather[0].main}</p>

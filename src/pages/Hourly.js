@@ -15,7 +15,7 @@ import Error from '../components/Error'
 
 function Hourly(props) {
     const [searchedQuery, setSearchedQuery] = useState('')
-    const {loading, error, data, onFetchHourlyByName} = props
+    const {loading, error, data, onFetchHourlyByName, onResetSearchList} = props
     const name = props.match.params.id
 
     useEffect(() => {
@@ -35,7 +35,7 @@ function Hourly(props) {
     )
 
     return (
-        <Container>
+        <Container onClick={onResetSearchList}>
             <NavBar city={name} />
             {error ? <Error err={error.msg} /> : null}
             {content}
@@ -53,7 +53,8 @@ const mapStateToProps = state => {
   
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchHourlyByName: (name, f_key, w_key) => dispatch(actions.fetchHourlyByName(name, f_key, w_key))
+        onFetchHourlyByName: (name, f_key, w_key) => dispatch(actions.fetchHourlyByName(name, f_key, w_key)),
+        onResetSearchList: () => dispatch(actions.resetSearchList())
     }
 }
 
