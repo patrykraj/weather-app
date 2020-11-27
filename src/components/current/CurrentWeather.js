@@ -1,9 +1,11 @@
-import { ConvertUnit, ConvertDate } from '../../assets/conversion'
+import React from 'react';
+import propTypes from 'prop-types';
 
-import LinkButton from '../LinkButton'
+import { ConvertUnit, ConvertDate } from '../../assets/conversion';
+import LinkButton from '../LinkButton';
 
 function CurrentWeather({ data }) {
-    return (
+  return (
         <>
             <h2>{data.name}, {data.sys.country}</h2>
             <LinkButton to={`/week/${data.name}`} >Check 16 day forecast</LinkButton>
@@ -22,15 +24,33 @@ function CurrentWeather({ data }) {
                 </p>
                 <p>
                     <span>
-                    Sunrise: {ConvertDate(data.sys.sunrise, data.timezone)}:{ConvertDate(data.sys.sunrise, data.timezone, true)}
+                    Sunrise: { ConvertDate(
+                      data.sys.sunrise,
+                      data.timezone,
+                    )}:{ ConvertDate(
+                      data.sys.sunrise,
+                      data.timezone,
+                      true,
+                    ) }
                     </span>
                     <span>
-                    Sunset: {ConvertDate(data.sys.sunset, data.timezone)}:{ConvertDate(data.sys.sunset, data.timezone, true)}  
+                    Sunset: {ConvertDate(
+                      data.sys.sunset,
+                      data.timezone,
+                    )}:{ConvertDate(
+                      data.sys.sunset,
+                      data.timezone,
+                      true,
+                    )}
                     </span>
                 </p>
             </div>
         </>
-    )
+  );
 }
 
-export default CurrentWeather
+export default CurrentWeather;
+
+CurrentWeather.propTypes = {
+  data: propTypes.object,
+};

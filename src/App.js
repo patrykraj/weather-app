@@ -1,12 +1,14 @@
+import React from 'react';
 import './App.css';
-import Home from './pages/Home'
-import Forecast from './pages/Forecast'
-import Hourly from './pages/Hourly'
+import {
+  BrowserRouter as Router, Switch, Route, Redirect,
+} from 'react-router-dom';
+import { Provider } from 'react-redux';
+import Home from './pages/Home';
+import Forecast from './pages/Forecast';
+import Hourly from './pages/Hourly';
 
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
-
-import { Provider } from 'react-redux'
-import store from './store/store'
+import store from './store/store';
 
 function App() {
   return (

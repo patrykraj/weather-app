@@ -1,15 +1,17 @@
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import styled from 'styled-components';
+import propTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
-function LinkButton({to, children}) {
-    return (
+function LinkButton({ to, children }) {
+  return (
         <LinkContainer>
             <Link to={to}>{children}</Link>
         </LinkContainer>
-    )
+  );
 }
 
-export default LinkButton
+export default LinkButton;
 
 const LinkContainer = styled.div`
     display: block;
@@ -20,4 +22,12 @@ const LinkContainer = styled.div`
         padding: 5px 15px;
         border-radius: 5px;
     }
-`
+`;
+
+LinkButton.propTypes = {
+  to: propTypes.string,
+  children: propTypes.oneOfType([
+    propTypes.arrayOf(propTypes.node),
+    propTypes.node,
+  ]),
+};

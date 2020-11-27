@@ -1,37 +1,38 @@
-import { NavLink } from 'react-router-dom'
-import styled from 'styled-components'
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import propTypes from 'prop-types';
+import styled from 'styled-components';
 
 function NavBar({ city }) {
-    const links = [
-        {
-            name: 'today',
-            to: '/'
-        },
-        {
-            name: 'hourly',
-            to: city ? `/hourly/${city}` : '/'
-        },
-        {
-            name: 'forecast',
-            to: city ? `/forecast/${city}` : '/'
-        }
-    ]
+  const links = [
+    {
+      name: 'today',
+      to: '/',
+    },
+    {
+      name: 'hourly',
+      to: city ? `/hourly/${city}` : '/',
+    },
+    {
+      name: 'forecast',
+      to: city ? `/forecast/${city}` : '/',
+    },
+  ];
 
-    return (
+  return (
         <Nav>
             <ul>
-                {links.map(link => 
-                    <li key={link.name}>
+                {links.map((link) => <li key={link.name}>
                         <NavLink exact activeClassName='active' to={link.to}>
                             {link.name}
                         </NavLink>
                     </li>)}
             </ul>
         </Nav>
-    )
+  );
 }
 
-export default NavBar
+export default NavBar;
 
 const Nav = styled.nav`
     background: rgba(255, 255, 255, .1);
@@ -70,4 +71,8 @@ const Nav = styled.nav`
             }
         }
     }
-`
+`;
+
+NavBar.propTypes = {
+  city: propTypes.string,
+};
