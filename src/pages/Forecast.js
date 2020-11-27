@@ -1,61 +1,73 @@
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from 'react';
+import propTypes from 'prop-types';
 
-import * as actions from '../store/actions'
-import { connect } from "react-redux"
+import { connect } from 'react-redux';
+import * as actions from '../store/actions';
 
-import { FORECAST_API_KEY as key } from '../assets/constants'
+import { FORECAST_API_KEY as key } from '../assets/constants';
 
-import Form from '../components/Form'
-import Days from '../components/forecast/Days'
-import Loader from '../components/Loader'
-import Container from '../components/styled/Container'
-import NavBar from '../components/nav/NavBar'
-import Error from '../components/Error'
+import Form from '../components/Form';
+import Days from '../components/forecast/Days';
+import Loader from '../components/Loader';
+import Container from '../components/styled/Container';
+import NavBar from '../components/nav/NavBar';
+import Error from '../components/Error';
 
 function Forecast(props) {
-    const [searchedQuery, setSearchedQuery] = useState('')
-    
-    const { onFetchForecastAuto, onResetSearchList,loading, data, error } = props
-    const name = props.match.params.id
+  const [searchedQuery, setSearchedQuery] = useState('');
 
-    useEffect(() => {
-        onFetchForecastAuto(name, key)
-    }, [name, onFetchForecastAuto])
+  const {
+    onFetchForecastAuto, onResetSearchList, loading, data, error,
+  } = props;
+  const name = props.match.params.id;
 
-    let content;
-    if(loading) content = <Loader />
-    else if(!data && !loading) content = <h1>Select location</h1>
-    else content = (
+  useEffect(() => {
+    onFetchForecastAuto(name, key);
+  }, [name, onFetchForecastAuto]);
+
+  let content;
+  if (loading) content = <Loader />;
+  else if (!data && !loading) content = <h1>Select location</h1>;
+  else {
+    content = (
         <>
             <h1>{data.city_name}, {data.country_code}:</h1>
             <Days data={data.data} />
         </>
-    )
+    );
+  }
 
-    return (
+  return (
         <Container onClick={onResetSearchList}>
             <NavBar city={name} />
             {error ? <Error err={error.msg} /> : null}
             <Form forecast searchedQuery={searchedQuery} setSearchedQuery={setSearchedQuery} />
             {content}
         </Container>
-    )
+  );
 }
 
-const mapStateToProps = state => {
-    return {
-      data: state.forecastData,
-      loading: state.loading,
-      error: state.error
-    }
-  }
-  
+const mapStateToProps = (state) => ({
+  data: state.forecastData,
+  loading: state.loading,
+  error: state.error,
+});
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onFetchForecastAuto: (name, key) => dispatch(actions.fetchForecastAuto(name, key)),
-        onResetSearchList: () => dispatch(actions.resetSearchList())
-    }
-}
+const mapDispatchToProps = (dispatch) => ({
+  onFetchForecastAuto: (name, fKey) => dispatch(actions.fetchForecastAuto(name, fKey)),
+  onResetSearchList: () => dispatch(actions.resetSearchList()),
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Forecast)
+export default connect(mapStateToProps, mapDispatchToProps)(Forecast);
+
+Forecast.propTypes = {
+  onFetchForecastAuto: propTypes.func,
+  onResetSearchList: propTypes.func,
+  loading: propTypes.bool,
+  data: propTypes.oneOfType([
+    propTypes.object,
+    propTypes.string,
+  ]),
+  error: propTypes.object,
+  match: propTypes.object,
+};

@@ -1,9 +1,11 @@
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
+import propTypes from 'prop-types';
 
 function Day({ data }) {
-    return (
+  return (
         <DayList>
-            {data.map(day => (
+            {data.map((day) => (
                 <DayElement key={day.datetime}>
                     <h4>{day.datetime.slice(-5, day.datetime.length)}</h4>
                     <img className='day-weather-icon' src={`https://www.weatherbit.io/static/img/icons/${day.weather.icon}.png`} alt='weather-icon' />
@@ -15,17 +17,17 @@ function Day({ data }) {
                 </DayElement>
             ))}
         </DayList>
-    )
+  );
 }
 
-export default Day
+export default Day;
 
 const DayList = styled.ul`
     padding: 0;
     margin: 0;
     width: 80%;
     max-width: 768px;
-`
+`;
 
 const DayElement = styled.ul`
     display: flex;
@@ -44,4 +46,8 @@ const DayElement = styled.ul`
         width: 16%;
         min-width: 56px;
     }
-`
+`;
+
+Day.propTypes = {
+  data: propTypes.array,
+};

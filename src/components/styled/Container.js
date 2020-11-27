@@ -1,7 +1,7 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 const Container = styled.div`
-    background: ${props => props.night ? '#243b55' : 'linear-gradient(-40deg, #56ccf2, #2f80ed)'};
+    background: ${(props) => (props.night ? '#243b55' : 'linear-gradient(-40deg, #56ccf2, #2f80ed)')};
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -17,7 +17,7 @@ const Container = styled.div`
     span {
         margin: 0 5px;
     }
-`
+`;
 
 export default Container;
 

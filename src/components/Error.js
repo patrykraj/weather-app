@@ -1,14 +1,24 @@
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
-function Error({ err }) {
-    return (
+function ErrorNotification({ err }) {
+  return (
         <ErrorElement>{err}</ErrorElement>
-    )
+  );
 }
 
-export default Error
+export default ErrorNotification;
 
 const ErrorElement = styled.p`
     color: #ec544c;
     font-size: 1.5rem;
-`
+`;
+
+ErrorNotification.propTypes = {
+  err: PropTypes.string,
+};
+
+ErrorNotification.defaultProps = {
+  err: null,
+};

@@ -1,18 +1,18 @@
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
 function Loader() {
-    return (
+  return (
         <LoaderContainer>
             <div className='loader-circle'></div>
             <div className='loader-circle'></div>
             <div className='loader-circle'></div>
             <p className='loader-caption'>Loading...</p>
         </LoaderContainer>
-    )
+  );
 }
 
-export default Loader
-
+export default Loader;
 
 const LoaderContainer = styled.div`
     display: flex;
@@ -59,4 +59,4 @@ const LoaderContainer = styled.div`
       opacity: 0;
     }
   }
-`
+`;

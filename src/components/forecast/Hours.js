@@ -1,14 +1,16 @@
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
+import propTypes from 'prop-types';
 
-import { ConvertDate } from '../../assets/conversion'
+import { convertDate } from '../../assets/utils';
 
 function Hours({ data }) {
-    return (
+  return (
         <List>
-            {data && data.hourly.map(hour => {
-                const date = ConvertDate(hour.dt, data.timezone_offset, false, true)
+            {data && data.hourly.map((hour) => {
+              const date = convertDate(hour.dt, data.timezone_offset, false, true);
 
-                return (
+              return (
                 <ListItem key={hour.dt}>
                     <span className='date'>
                         <p className='date-hour'>
@@ -17,19 +19,19 @@ function Hours({ data }) {
                         <p className='date-day'>
                             {date.getUTCDate()}.{date.getUTCMonth() + 1}
                         </p>
-                    </span> 
-                    <WeatherIcon src={`http://openweathermap.org/img/wn/${hour.weather[0].icon}@4x.png`} alt='weather_icon'/> 
-                    <span>{Number(hour.temp.toFixed()) === 0 ? 0 : hour.temp.toFixed()}&deg;C</span> 
-                    <span>Clouds: {hour.clouds}%</span> 
+                    </span>
+                    <WeatherIcon src={`http://openweathermap.org/img/wn/${hour.weather[0].icon}@4x.png`} alt='weather_icon'/>
+                    <span>{Number(hour.temp.toFixed()) === 0 ? 0 : hour.temp.toFixed()}&deg;C</span>
+                    <span>Clouds: {hour.clouds}%</span>
                     <span>POP: {(hour.pop * 100).toFixed()}%</span>
                 </ListItem>
-                )}
-            )}
+              );
+            })}
         </List>
-    )
+  );
 }
 
-export default Hours
+export default Hours;
 
 const List = styled.ul`
     margin: 0;
@@ -43,7 +45,7 @@ const List = styled.ul`
     @media(max-width: 600px) {
         width: 95%;
     }
-`
+`;
 
 const ListItem = styled.li`
     display: flex;
@@ -64,8 +66,12 @@ const ListItem = styled.li`
             color: #eee;
         }
     }
-`
+`;
 const WeatherIcon = styled.img`
     width: 11%;
     min-width: 66px;
-`
+`;
+
+Hours.propTypes = {
+  data: propTypes.object,
+};

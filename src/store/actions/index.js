@@ -1,208 +1,172 @@
-import * as actions from '../constants'
-import axios from 'axios'
+import axios from 'axios';
+import * as actions from '../constants';
 
-export const fetchWeatherStart = () => {
-    return {
-        type: actions.FETCH_WEATHER_START
-    }
-}
+export const fetchWeatherStart = () => ({
+  type: actions.FETCH_WEATHER_START,
+});
 
-export const fetchWeatherSuccess = (data) => {
-    return {
-        type: actions.FETCH_WEATHER_SUCCESS,
-        payload: data
-    }
-}
+export const fetchWeatherSuccess = (data) => ({
+  type: actions.FETCH_WEATHER_SUCCESS,
+  payload: data,
+});
 
-export const fetchWeatherFailure = (err) => {
-    return {
-        type: actions.FETCH_WEATHER_FAILURE,
-        payload: err
-    }
-}
+export const fetchWeatherFailure = (err) => ({
+  type: actions.FETCH_WEATHER_FAILURE,
+  payload: err,
+});
 
-export const fetchCoordsSuccess = (data, coords) => {
-    return {
-        type: actions.FETCH_COORDS_SUCCESS,
-        payload: {
-            data,
-            coords
+export const fetchCoordsSuccess = (data, coords) => ({
+  type: actions.FETCH_COORDS_SUCCESS,
+  payload: {
+    data,
+    coords,
+  },
+});
+
+export const setError = (err) => ({
+  type: actions.SET_ERROR,
+  payload: err,
+});
+
+export const fetchForecastSuccess = (data) => ({
+  type: actions.FETCH_FORECAST_SUCCESS,
+  payload: data,
+});
+
+export const fetchForecastFailure = (err) => ({
+  type: actions.FETCH_WEATHER_FAILURE,
+  payload: err,
+});
+
+export const fetchWeatherByCoords = ({ coords, key }) => async (dispatch) => {
+  axios
+    .get(`https://api.openweathermap.org/data/2.5/weather?lat=${coords.lat}&lon=${coords.lon}&appid=${key}&units=metric`)
+    .then((res) => {
+      dispatch(fetchCoordsSuccess(res.data, coords));
+    })
+    .catch((err) => {
+      dispatch(fetchWeatherFailure(err.response ? err.response.data.message : err.message));
+    });
+};
+
+export const fetchForecast = ({ name, key }) => async (dispatch) => {
+  dispatch(fetchWeatherStart());
+
+  axios
+    .get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${name}&key=${key}`)
+    .then((res) => {
+      dispatch(fetchForecastSuccess(res.data));
+    })
+    .catch((err) => {
+      dispatch(fetchForecastFailure(err.response ? err.response.data.message : err.message));
+    });
+};
+
+export const fetchWeatherByName = (forecast, url) => async (dispatch) => {
+  dispatch(fetchWeatherStart());
+
+  axios
+    .get(url)
+    .then((city) => {
+      if (city.statusText !== 'No Content') {
+        if (forecast) {
+          dispatch(fetchForecastSuccess(city.data));
+
+          const newurl = `${window.location.protocol}//${window.location.host}/forecast/${city.data.city_name}`;
+          window.history.pushState({ path: newurl }, '', newurl);
+        } else {
+          dispatch(fetchWeatherSuccess(city.data));
         }
-    }
-}
+      } else {
+        dispatch(fetchWeatherFailure('City not found'));
+      }
+    })
+    .catch((err) => {
+      dispatch(fetchWeatherFailure(err.response ? err.response.data.message : err.message));
+    });
+};
 
-export const setError = (err) => {
-    return {
-        type: actions.SET_ERROR,
-        payload: err
-    }
-}
+export const fetchForecastAuto = (name, key) => async (dispatch) => {
+  dispatch(fetchWeatherStart());
 
-export const fetchForecastSuccess = (data) => {
-    return {
-        type: actions.FETCH_FORECAST_SUCCESS,
-        payload: data
-    }
-}
+  axios
+    .get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${name}&key=${key}`)
+    .then((res) => {
+      dispatch(fetchForecastSuccess(res.data));
+    })
+    .catch((err) => {
+      dispatch(fetchForecastFailure({
+        msg: err.response ? err.response.data.message : err.message,
+      }));
+    });
+};
 
-export const fetchForecastFailure = (err) => {
-    return {
-        type: actions.FETCH_WEATHER_FAILURE,
-        payload: err
-    }
-}
+export const fetchSearchListStart = () => ({
+  type: actions.FETCH_SEARCH_LIST_START,
+});
 
-export const fetchWeatherByCoords = ({ coords, key }) => {
-    return async (dispatch) => {
-        axios
-            .get(`https://api.openweathermap.org/data/2.5/weather?lat=${coords.lat}&lon=${coords.lon}&appid=${key}&units=metric`)
-            .then(res => {
-                dispatch(fetchCoordsSuccess(res.data, coords))
-            })
-            .catch(err => {
-                dispatch(fetchWeatherFailure(err.response ? err.response.data.message : err.message))
-            })
-    }
-}
+export const fetchSearchListSuccess = (data) => ({
+  type: actions.FETCH_SEARCH_LIST_SUCCESS,
+  payload: data,
+});
 
-export const fetchForecast = ({ name, key }) => {
-    return async dispatch => {
-        dispatch(fetchWeatherStart())
-        
-        axios
-            .get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${name}&key=${key}`)
-            .then(res => {
-                dispatch(fetchForecastSuccess(res.data))
-            })
-            .catch(err => {
-                dispatch(fetchForecastFailure(err.response ? err.response.data.message : err.message))
-            })
-    }
-}
+export const fetchSearchListFailure = () => ({
+  type: actions.FETCH_SEARCH_LIST_FAILURE,
+});
 
-export const fetchWeatherByName = (forecast, url) => {
-    return async dispatch => {
-        dispatch(fetchWeatherStart())
+export const resetSearchList = () => ({
+  type: actions.FETCH_SEARCH_LIST_FAILURE,
+});
 
-        axios
-            .get(url)
-            .then(city => {
-                if(forecast) {
-                    dispatch(fetchForecastSuccess(city.data))
-                    
-                    var newurl = window.location.protocol + "//" + window.location.host + '/forecast/' + city.data.city_name;
-                    window.history.pushState({path:newurl},'',newurl);
-                } else {
-                    dispatch(fetchWeatherSuccess(city.data))
-                }
-            })
-            .catch(err => {
-                dispatch(fetchWeatherFailure(err.response ? err.response.data.message : err.message))
-            })
-    }
-}
+export const fetchSearchList = (query) => async (dispatch) => {
+  if (query.trim().length > 2) {
+    dispatch(fetchSearchListStart());
 
-export const fetchForecastAuto = (name, key) => {
-    return async dispatch => {
-        dispatch(fetchWeatherStart())
+    axios
+      .get(`https://public.opendatasoft.com/api/records/1.0/search/?dataset=worldcitiespop&q=${query}&rows=5&sort=population`)
+      .then((res) => {
+        dispatch(fetchSearchListSuccess(res.data.records));
+      })
+      .catch(() => {
+        dispatch(fetchSearchListFailure());
+      });
+  } else dispatch(fetchSearchListFailure());
+};
 
-        axios
-            .get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${name}&key=${key}`)
-            .then(res => {
-                dispatch(fetchForecastSuccess(res.data))
-            })
-            .catch(err => {
-                dispatch(fetchForecastFailure({
-                    msg: err.response ? err.response.data.message : err.message
-                }))
-            })
-    }
-}
+export const fetchHourlyByNameSuccess = (data) => ({
+  type: actions.FETCH_HOURLY_BY_NAME_SUCCESS,
+  payload: data,
+});
 
-export const fetchSearchListStart = () => {
-    return {
-        type: actions.FETCH_SEARCH_LIST_START
-    }
-}
+export const fetchHourlyByNameFailure = (err) => ({
+  type: actions.FETCH_HOURLY_BY_NAME_FAILURE,
+  payload: err,
+});
 
-export const fetchSearchListSuccess = (data) => {
-    return {
-        type: actions.FETCH_SEARCH_LIST_SUCCESS,
-        payload: data
-    }
-}
+export const fetchHourlyByName = (name, fKey, wKey) => async (dispatch) => {
+  dispatch(fetchWeatherStart());
 
-export const fetchSearchListFailure = () => {
-    return {
-        type: actions.FETCH_SEARCH_LIST_FAILURE
-    }
-}
+  axios
+    .get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${name}&key=${fKey}`)
+    .then((res) => {
+      axios
+        .get(`https://api.openweathermap.org/data/2.5/onecall?lat=${res.data.lat}&lon=${res.data.lon}&exclude=current,minutely,daily&appid=${wKey}&units=metric`)
+        .then((data) => {
+          let result = data.data;
 
-export const resetSearchList = () => {
-    return {
-        type: actions.FETCH_SEARCH_LIST_FAILURE
-    }
-}
+          result = {
+            ...result,
+            city_name: res.data.city_name,
+            country_code: res.data.country_code,
+          };
 
-export const fetchSearchList = (query) => {
-    return async dispatch => {
-        if(query.trim().length > 2) {
-            dispatch(fetchSearchListStart())
-
-            axios
-            .get(`https://public.opendatasoft.com/api/records/1.0/search/?dataset=worldcitiespop&q=${query}&rows=5&sort=population`)
-            .then(res => {
-                dispatch(fetchSearchListSuccess(res.data.records))
-            })
-            .catch(err => {
-                dispatch(fetchSearchListFailure())
-            })
-        } else dispatch(fetchSearchListFailure())
-    }
-}
-
-export const fetchHourlyByNameSuccess = (data) => {
-    return {
-        type: actions.FETCH_HOURLY_BY_NAME_SUCCESS,
-        payload: data
-    }
-}
-
-export const fetchHourlyByNameFailure = (err) => {
-    return {
-        type: actions.FETCH_HOURLY_BY_NAME_FAILURE,
-        payload: err
-    }
-}
-
-export const fetchHourlyByName = (name, f_key, w_key) => {
-    return async dispatch => {
-        dispatch(fetchWeatherStart())
-
-        axios
-            .get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${name}&key=${f_key}`)
-            .then(res => {
-                
-                axios
-                    .get(`https://api.openweathermap.org/data/2.5/onecall?lat=${res.data.lat}&lon=${res.data.lon}&exclude=current,minutely,daily&appid=${w_key}&units=metric`)
-                    .then(data => {
-                        let result = data.data
-
-                        result = {
-                            ...result,
-                            city_name: res.data.city_name,
-                            country_code: res.data.country_code
-                        }
-
-                        dispatch(fetchHourlyByNameSuccess(result))
-                    })
-                    .catch(err => {
-                        dispatch(fetchHourlyByNameFailure('City not found'))
-                    })
-
-            })
-            .catch(err => {
-                dispatch(fetchHourlyByNameFailure(err.response ? err.response.data.message : err.message))
-            })
-    }
-}
+          dispatch(fetchHourlyByNameSuccess(result));
+        })
+        .catch(() => {
+          dispatch(fetchHourlyByNameFailure('City not found'));
+        });
+    })
+    .catch((err) => {
+      dispatch(fetchHourlyByNameFailure(err.response ? err.response.data.message : err.message));
+    });
+};

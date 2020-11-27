@@ -1,14 +1,16 @@
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
+import propTypes from 'prop-types';
 
 function SearchList({ items, handleSearchQueryFromList, loading }) {
-    return (
+  return (
         <List>
-            {loading ? <ListItem className='disabled'>Searching...</ListItem> : items.map(city => city.fields.population ? <ListItem key={Math.random()} onClick={() => handleSearchQueryFromList(`${city.fields.accentcity}, ${city.fields.country}`)}>{city.fields.accentcity}, {city.fields.country.toUpperCase()}</ListItem> : null)}
+            {loading ? <ListItem className='disabled'>Searching...</ListItem> : items.map((city) => (city.fields.population ? <ListItem key={Math.random()} onClick={() => handleSearchQueryFromList(`${city.fields.accentcity}, ${city.fields.country}`)}>{city.fields.accentcity}, {city.fields.country.toUpperCase()}</ListItem> : null))}
         </List>
-    )
+  );
 }
 
-export default SearchList
+export default SearchList;
 
 const List = styled.ul`
     position: absolute;
@@ -23,7 +25,7 @@ const List = styled.ul`
     border-radius: 10px;
     text-align: left;
     overflow: hidden;
-`
+`;
 
 const ListItem = styled.li`
     border-bottom: 1px solid #111;
@@ -48,4 +50,10 @@ const ListItem = styled.li`
         background: #eee;
         color: #111;
     }
-`
+`;
+
+SearchList.propTypes = {
+  items: propTypes.array,
+  loading: propTypes.bool,
+  handleSearchQueryFromList: propTypes.func,
+};
