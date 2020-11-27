@@ -68,13 +68,17 @@ export const fetchWeatherByName = (forecast, url) => async (dispatch) => {
   axios
     .get(url)
     .then((city) => {
-      if (forecast) {
-        dispatch(fetchForecastSuccess(city.data));
+      if (city.statusText !== 'No Content') {
+        if (forecast) {
+          dispatch(fetchForecastSuccess(city.data));
 
-        const newurl = `${window.location.protocol}//${window.location.host}/forecast/${city.data.city_name}`;
-        window.history.pushState({ path: newurl }, '', newurl);
+          const newurl = `${window.location.protocol}//${window.location.host}/forecast/${city.data.city_name}`;
+          window.history.pushState({ path: newurl }, '', newurl);
+        } else {
+          dispatch(fetchWeatherSuccess(city.data));
+        }
       } else {
-        dispatch(fetchWeatherSuccess(city.data));
+        dispatch(fetchWeatherFailure('City not found'));
       }
     })
     .catch((err) => {

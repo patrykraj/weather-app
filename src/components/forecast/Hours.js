@@ -2,13 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import propTypes from 'prop-types';
 
-import { ConvertDate } from '../../assets/conversion';
+import { convertDate } from '../../assets/utils';
 
 function Hours({ data }) {
   return (
         <List>
             {data && data.hourly.map((hour) => {
-              const date = ConvertDate(hour.dt, data.timezone_offset, false, true);
+              const date = convertDate(hour.dt, data.timezone_offset, false, true);
 
               return (
                 <ListItem key={hour.dt}>

@@ -64,7 +64,10 @@ Forecast.propTypes = {
   onFetchForecastAuto: propTypes.func,
   onResetSearchList: propTypes.func,
   loading: propTypes.bool,
-  data: propTypes.object,
+  data: propTypes.oneOfType([
+    propTypes.object,
+    propTypes.string,
+  ]),
   error: propTypes.object,
   match: propTypes.object,
 };

@@ -67,11 +67,9 @@ function Form({
             <Submit type='submit'>
                 <img src={Glass} alt='glass' />
             </Submit>
-            {list
-              ? <SearchList items={list}
+            {list && <SearchList items={list}
               handleSearchQueryFromList={handleSearchQueryFromList}
               loading={loading} />
-              : null
             }
         </FormContainer>
   );
