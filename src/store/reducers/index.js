@@ -9,6 +9,7 @@ const initialState = {
   error: null,
   searchListData: null,
   searchListLoading: false,
+  activeSearchListElement: 0,
 };
 
 const reducer = (state = initialState, action) => {
@@ -107,6 +108,12 @@ const reducer = (state = initialState, action) => {
           msg: action.payload,
         },
         searchListData: null,
+      };
+
+    case actions.SET_ACTIVE_SEARCH_LIST_ELEMENT:
+      return {
+        ...state,
+        activeSearchListElement: state.activeSearchListElement + action.payload,
       };
 
     default: {

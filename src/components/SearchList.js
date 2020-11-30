@@ -1,11 +1,43 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import propTypes from 'prop-types';
 
-function SearchList({ items, handleSearchQueryFromList, loading }) {
+function SearchList({
+  items,
+  activeSearchListElement,
+  onSetActiveSearchListElement,
+  handleSearchQueryFromList,
+  loading,
+}) {
+  const form = document.querySelector('div #form');
+
+  const handleKeyDown = (e) => {
+    e.stopImmediatePropagation();
+
+    if (e.keyCode === 38 && activeSearchListElement > 0) {
+      e.preventDefault();
+      onSetActiveSearchListElement(-1);
+    } else if (e.keyCode === 40 && activeSearchListElement < items.length - 1) {
+      onSetActiveSearchListElement(1);
+    }
+  };
+
+  useEffect(() => {
+    form.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      form.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activeSearchListElement, items]);
+
   return (
         <List>
-            {loading ? <ListItem className='disabled'>Searching...</ListItem> : items.map((city) => (city.fields.population ? <ListItem key={Math.random()} onClick={() => handleSearchQueryFromList(`${city.fields.accentcity}, ${city.fields.country}`)}>{city.fields.accentcity}, {city.fields.country.toUpperCase()}</ListItem> : null))}
+            {loading ? <ListItem className='disabled'>Searching...</ListItem> : items.map((city, id) => (
+                <ListItem className={id === activeSearchListElement ? 'active' : null}
+                key={city.recordid}
+                onClick={() => handleSearchQueryFromList(`${city.fields.accentcity}, ${city.fields.country}`)}>
+                    {city.fields.accentcity}, {city.fields.country.toUpperCase()}
+                </ListItem>))}
         </List>
   );
 }
@@ -33,6 +65,11 @@ const ListItem = styled.li`
     cursor: pointer;
     overflow: hidden;
 
+    &.active {
+        background: #243b55;
+        color: #eee;
+    }
+
     &:last-child {
         border-bottom: none;
     }
@@ -55,5 +92,7 @@ const ListItem = styled.li`
 SearchList.propTypes = {
   items: propTypes.array,
   loading: propTypes.bool,
+  activeSearchListElement: propTypes.number,
+  onSetActiveSearchListElement: propTypes.func,
   handleSearchQueryFromList: propTypes.func,
 };

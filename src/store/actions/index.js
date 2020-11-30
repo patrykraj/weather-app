@@ -125,7 +125,13 @@ export const fetchSearchList = (query) => async (dispatch) => {
     axios
       .get(`https://public.opendatasoft.com/api/records/1.0/search/?dataset=worldcitiespop&q=${query}&rows=5&sort=population`)
       .then((res) => {
-        dispatch(fetchSearchListSuccess(res.data.records));
+        const list = [];
+
+        for (let i = 0; i < res.data.records.length; i += 1) {
+          if (res.data.records[i].fields.population) list.push(res.data.records[i]);
+        }
+
+        dispatch(fetchSearchListSuccess(list));
       })
       .catch(() => {
         dispatch(fetchSearchListFailure());
@@ -170,3 +176,8 @@ export const fetchHourlyByName = (name, fKey, wKey) => async (dispatch) => {
       dispatch(fetchHourlyByNameFailure(err.response ? err.response.data.message : err.message));
     });
 };
+
+export const setActiveSearchListElement = (val) => ({
+  type: actions.SET_ACTIVE_SEARCH_LIST_ELEMENT,
+  payload: val,
+});

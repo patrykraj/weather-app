@@ -20,6 +20,8 @@ function Form({
   list,
   loading,
   onFetchSearchList,
+  activeSearchListElement,
+  onSetActiveSearchListElement,
 }) {
   const handleSetQuery = (e) => {
     if (!/^[a-zA-Z\s]*$/g.test(e.target.value)) return;
@@ -62,14 +64,16 @@ function Form({
   };
 
   return (
-        <FormContainer onSubmit={handleSearchQuery}>
+        <FormContainer id='form' onSubmit={handleSearchQuery}>
             <Input type='text' value={searchedQuery} placeholder='City' onInput={handleSetQuery} pattern="[A-Za-z\s]+" title="Please use only letters"/>
             <Submit type='submit'>
                 <img src={Glass} alt='glass' />
             </Submit>
             {list && <SearchList items={list}
               handleSearchQueryFromList={handleSearchQueryFromList}
-              loading={loading} />
+              loading={loading}
+              activeSearchListElement={activeSearchListElement}
+              onSetActiveSearchListElement={onSetActiveSearchListElement} />
             }
         </FormContainer>
   );
@@ -78,6 +82,7 @@ function Form({
 const mapStateToProps = (state) => ({
   list: state.searchListData,
   loading: state.searchListLoading,
+  activeSearchListElement: state.activeSearchListElement,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -85,6 +90,7 @@ const mapDispatchToProps = (dispatch) => ({
   onFetchHourlyByName: (name, fKey, wKey) => dispatch(actions.fetchHourlyByName(name, fKey, wKey)),
   onSetError: (payload) => dispatch(actions.setError(payload)),
   onFetchSearchList: (query) => dispatch(actions.fetchSearchList(query)),
+  onSetActiveSearchListElement: (val) => dispatch(actions.setActiveSearchListElement(val)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form);
@@ -146,6 +152,7 @@ const Submit = styled.button`
 
 Form.propTypes = {
   searchedQuery: propTypes.string,
+  activeSearchListElement: propTypes.number,
   forecast: propTypes.bool,
   loading: propTypes.bool,
   hourly: propTypes.bool,
@@ -154,5 +161,6 @@ Form.propTypes = {
   onFetchSearchList: propTypes.func,
   onSetError: propTypes.func,
   setSearchedQuery: propTypes.func,
+  onSetActiveSearchListElement: propTypes.func,
   list: propTypes.array,
 };
