@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import propTypes from 'prop-types';
@@ -23,11 +23,15 @@ function Form({
   activeSearchListElement,
   onSetActiveSearchListElement,
 }) {
+  const [selectedCity, setSelectedCity] = useState(null);
+
   const handleSetQuery = (e) => {
     if (!/^[a-zA-Z\s]*$/g.test(e.target.value)) return;
     setSearchedQuery(e.target.value);
 
     onFetchSearchList(e.target.value);
+    onSetActiveSearchListElement(-activeSearchListElement);
+    setSelectedCity(null);
   };
 
   const handleSearchQuery = (e) => {
@@ -63,8 +67,25 @@ function Form({
     }
   };
 
+  const handleSelectedCityFromList = (e, query) => {
+    e.preventDefault();
+
+    const city = `${query.fields.city}, ${query.fields.country}`;
+
+    const url = forecast ? `https://api.weatherbit.io/v2.0/forecast/daily?city=${city}&key=${fkey}` : `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${wkey}&units=metric`;
+
+    if (hourly) {
+      onFetchHourlyByName(city, fkey, wkey);
+    } else {
+      onFetchWeatherByName(forecast, url);
+    }
+
+    setSearchedQuery('');
+    setSelectedCity(null);
+  };
+
   return (
-        <FormContainer id='form' onSubmit={handleSearchQuery}>
+        <FormContainer id='form' onSubmit={selectedCity ? (e) => handleSelectedCityFromList(e, selectedCity) : handleSearchQuery}>
             <Input type='text' value={searchedQuery} placeholder='City' onInput={handleSetQuery} pattern="[A-Za-z\s]+" title="Please use only letters"/>
             <Submit type='submit'>
                 <img src={Glass} alt='glass' />
@@ -73,7 +94,9 @@ function Form({
               handleSearchQueryFromList={handleSearchQueryFromList}
               loading={loading}
               activeSearchListElement={activeSearchListElement}
-              onSetActiveSearchListElement={onSetActiveSearchListElement} />
+              onSetActiveSearchListElement={onSetActiveSearchListElement}
+              setSelectedCity={setSelectedCity}
+              />
             }
         </FormContainer>
   );
@@ -156,11 +179,11 @@ Form.propTypes = {
   forecast: propTypes.bool,
   loading: propTypes.bool,
   hourly: propTypes.bool,
+  list: propTypes.array,
   onFetchWeatherByName: propTypes.func,
   onFetchHourlyByName: propTypes.func,
   onFetchSearchList: propTypes.func,
   onSetError: propTypes.func,
   setSearchedQuery: propTypes.func,
   onSetActiveSearchListElement: propTypes.func,
-  list: propTypes.array,
 };

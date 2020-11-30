@@ -6,6 +6,7 @@ function SearchList({
   items,
   activeSearchListElement,
   onSetActiveSearchListElement,
+  setSelectedCity,
   handleSearchQueryFromList,
   loading,
 }) {
@@ -23,6 +24,8 @@ function SearchList({
   };
 
   useEffect(() => {
+    items.map((city, id) => (id === activeSearchListElement ? setSelectedCity(city) : null));
+
     form.addEventListener('keydown', handleKeyDown);
 
     return () => {
@@ -95,4 +98,5 @@ SearchList.propTypes = {
   activeSearchListElement: propTypes.number,
   onSetActiveSearchListElement: propTypes.func,
   handleSearchQueryFromList: propTypes.func,
+  setSelectedCity: propTypes.func,
 };

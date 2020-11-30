@@ -118,6 +118,11 @@ export const resetSearchList = () => ({
   type: actions.FETCH_SEARCH_LIST_FAILURE,
 });
 
+export const setActiveSearchListElement = (val) => ({
+  type: actions.SET_ACTIVE_SEARCH_LIST_ELEMENT,
+  payload: val,
+});
+
 export const fetchSearchList = (query) => async (dispatch) => {
   if (query.trim().length > 2) {
     dispatch(fetchSearchListStart());
@@ -176,8 +181,3 @@ export const fetchHourlyByName = (name, fKey, wKey) => async (dispatch) => {
       dispatch(fetchHourlyByNameFailure(err.response ? err.response.data.message : err.message));
     });
 };
-
-export const setActiveSearchListElement = (val) => ({
-  type: actions.SET_ACTIVE_SEARCH_LIST_ELEMENT,
-  payload: val,
-});
