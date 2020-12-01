@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import propTypes from 'prop-types';
@@ -22,8 +22,10 @@ function Form({
   onFetchSearchList,
   activeSearchListElement,
   onSetActiveSearchListElement,
+  onSetActiveSearchListElementByMouseover,
 }) {
   const [selectedCity, setSelectedCity] = useState(null);
+  const formRef = useRef();
 
   const handleSetQuery = (e) => {
     if (!/^[a-zA-Z\s]*$/g.test(e.target.value)) return;
@@ -85,17 +87,22 @@ function Form({
   };
 
   return (
-        <FormContainer id='form' onSubmit={selectedCity ? (e) => handleSelectedCityFromList(e, selectedCity) : handleSearchQuery}>
-            <Input type='text' value={searchedQuery} placeholder='City' onInput={handleSetQuery} pattern="[A-Za-z\s]+" title="Please use only letters"/>
-            <Submit type='submit'>
-                <img src={Glass} alt='glass' />
+        <FormContainer ref={formRef} id="form"
+        onSubmit={selectedCity ? (e) => handleSelectedCityFromList(
+          e, selectedCity,
+        ) : handleSearchQuery}>
+            <Input type="text" value={searchedQuery} placeholder="City" onInput={handleSetQuery} pattern="[A-Za-z\s]+" title="Please use only letters"/>
+            <Submit type="submit">
+                <img src={Glass} alt="glass" />
             </Submit>
             {list && <SearchList items={list}
               handleSearchQueryFromList={handleSearchQueryFromList}
               loading={loading}
               activeSearchListElement={activeSearchListElement}
               onSetActiveSearchListElement={onSetActiveSearchListElement}
+              onSetActiveSearchListElementByMouseover={onSetActiveSearchListElementByMouseover}
               setSelectedCity={setSelectedCity}
+              formComponent={formRef.current}
               />
             }
         </FormContainer>
@@ -114,6 +121,9 @@ const mapDispatchToProps = (dispatch) => ({
   onSetError: (payload) => dispatch(actions.setError(payload)),
   onFetchSearchList: (query) => dispatch(actions.fetchSearchList(query)),
   onSetActiveSearchListElement: (val) => dispatch(actions.setActiveSearchListElement(val)),
+  onSetActiveSearchListElementByMouseover: (val) => dispatch(
+    actions.setActiveSearchListElementByMouseover(val),
+  ),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form);
@@ -186,4 +196,5 @@ Form.propTypes = {
   onSetError: propTypes.func,
   setSearchedQuery: propTypes.func,
   onSetActiveSearchListElement: propTypes.func,
+  onSetActiveSearchListElementByMouseover: propTypes.func,
 };

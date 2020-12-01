@@ -123,6 +123,11 @@ export const setActiveSearchListElement = (val) => ({
   payload: val,
 });
 
+export const setActiveSearchListElementByMouseover = (val) => ({
+  type: actions.SET_ACTIVE_SEARCH_LIST_ELEMENT_BY_MOUSEOVER,
+  payload: val,
+});
+
 export const fetchSearchList = (query) => async (dispatch) => {
   if (query.trim().length > 2) {
     dispatch(fetchSearchListStart());

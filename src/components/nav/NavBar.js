@@ -23,7 +23,7 @@ function NavBar({ city }) {
         <Nav>
             <ul>
                 {links.map((link) => <li key={link.name}>
-                        <NavLink exact activeClassName='active' to={link.to}>
+                        <NavLink exact activeClassName="active" to={link.to}>
                             {link.name}
                         </NavLink>
                     </li>)}

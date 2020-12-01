@@ -6,38 +6,48 @@ function SearchList({
   items,
   activeSearchListElement,
   onSetActiveSearchListElement,
+  onSetActiveSearchListElementByMouseover,
   setSelectedCity,
   handleSearchQueryFromList,
   loading,
+  formComponent,
 }) {
-  const form = document.querySelector('div #form');
-
   const handleKeyDown = (e) => {
     e.stopImmediatePropagation();
 
-    if (e.keyCode === 38 && activeSearchListElement > 0) {
+    const enterKeyUp = 38;
+    const enterKeyDown = 40;
+
+    if (e.keyCode === enterKeyUp && activeSearchListElement > 0) {
       e.preventDefault();
       onSetActiveSearchListElement(-1);
-    } else if (e.keyCode === 40 && activeSearchListElement < items.length - 1) {
+    } else if (e.keyCode === enterKeyDown && activeSearchListElement < items.length - 1) {
       onSetActiveSearchListElement(1);
     }
+  };
+
+  const handleMouseOverListElement = (hoveredCity) => {
+    items.map((city, id) => (hoveredCity.recordid === city.recordid
+      ? onSetActiveSearchListElementByMouseover(id)
+      : null));
   };
 
   useEffect(() => {
     items.map((city, id) => (id === activeSearchListElement ? setSelectedCity(city) : null));
 
-    form.addEventListener('keydown', handleKeyDown);
+    formComponent.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      form.removeEventListener('keydown', handleKeyDown);
+      formComponent.removeEventListener('keydown', handleKeyDown);
     };
   }, [activeSearchListElement, items]);
 
   return (
         <List>
-            {loading ? <ListItem className='disabled'>Searching...</ListItem> : items.map((city, id) => (
+            {loading ? <ListItem className="disabled">Searching...</ListItem> : items.map((city, id) => (
                 <ListItem className={id === activeSearchListElement ? 'active' : null}
                 key={city.recordid}
+                onMouseOver={() => handleMouseOverListElement(city)}
                 onClick={() => handleSearchQueryFromList(`${city.fields.accentcity}, ${city.fields.country}`)}>
                     {city.fields.accentcity}, {city.fields.country.toUpperCase()}
                 </ListItem>))}
@@ -96,7 +106,9 @@ SearchList.propTypes = {
   items: propTypes.array,
   loading: propTypes.bool,
   activeSearchListElement: propTypes.number,
+  onSetActiveSearchListElementByMouseover: propTypes.func,
   onSetActiveSearchListElement: propTypes.func,
   handleSearchQueryFromList: propTypes.func,
   setSelectedCity: propTypes.func,
+  formComponent: propTypes.object,
 };

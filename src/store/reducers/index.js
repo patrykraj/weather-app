@@ -116,6 +116,12 @@ const reducer = (state = initialState, action) => {
         activeSearchListElement: state.activeSearchListElement + action.payload,
       };
 
+    case actions.SET_ACTIVE_SEARCH_LIST_ELEMENT_BY_MOUSEOVER:
+      return {
+        ...state,
+        activeSearchListElement: action.payload,
+      };
+
     default: {
       return {
         ...state,
