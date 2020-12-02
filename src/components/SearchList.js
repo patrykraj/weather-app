@@ -87,18 +87,8 @@ const ListItem = styled.li`
         border-bottom: none;
     }
 
-    &:hover {
-        background: #243b55;
-        color: #eee;
-    }
-
     &.disabled {
         cursor: default;
-    }
-
-    &.disabled:hover {
-        background: #eee;
-        color: #111;
     }
 `;
 
