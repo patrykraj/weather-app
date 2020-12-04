@@ -4,10 +4,10 @@ import styled from 'styled-components';
 function Loader() {
   return (
         <LoaderContainer>
-            <div className='loader-circle'></div>
-            <div className='loader-circle'></div>
-            <div className='loader-circle'></div>
-            <p className='loader-caption'>Loading...</p>
+            <div className="loader-circle"></div>
+            <div className="loader-circle"></div>
+            <div className="loader-circle"></div>
+            <p className="loader-caption">Loading...</p>
         </LoaderContainer>
   );
 }

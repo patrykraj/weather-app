@@ -8,8 +8,8 @@ function Day({ data }) {
             {data.map((day) => (
                 <DayElement key={day.datetime}>
                     <h4>{day.datetime.slice(-5, day.datetime.length)}</h4>
-                    <img className='day-weather-icon' src={`https://www.weatherbit.io/static/img/icons/${day.weather.icon}.png`} alt='weather-icon' />
-                    <div className='day-temp'>
+                    <img className="day-weather-icon" src={`https://www.weatherbit.io/static/img/icons/${day.weather.icon}.png`} alt='weather-icon' />
+                    <div className="day-temp">
                         <h4>{Math.round(day.max_temp)}&deg;/</h4>
                         <h4>{Math.round(day.low_temp)}&deg;</h4>
                     </div>

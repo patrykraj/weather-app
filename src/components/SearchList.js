@@ -1,11 +1,56 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import propTypes from 'prop-types';
 
-function SearchList({ items, handleSearchQueryFromList, loading }) {
+function SearchList({
+  items,
+  activeSearchListElement,
+  onSetActiveSearchListElement,
+  onSetActiveSearchListElementByMouseover,
+  setSelectedCity,
+  handleSearchQueryFromList,
+  loading,
+  formComponent,
+}) {
+  const handleKeyDown = (e) => {
+    e.stopImmediatePropagation();
+
+    const enterKeyUp = 38;
+    const enterKeyDown = 40;
+
+    if (e.keyCode === enterKeyUp && activeSearchListElement > 0) {
+      e.preventDefault();
+      onSetActiveSearchListElement(-1);
+    } else if (e.keyCode === enterKeyDown && activeSearchListElement < items.length - 1) {
+      onSetActiveSearchListElement(1);
+    }
+  };
+
+  const handleMouseOverListElement = (hoveredCity) => {
+    items.map((city, id) => (hoveredCity.recordid === city.recordid
+      ? onSetActiveSearchListElementByMouseover(id)
+      : null));
+  };
+
+  useEffect(() => {
+    items.map((city, id) => (id === activeSearchListElement ? setSelectedCity(city) : null));
+
+    formComponent.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      formComponent.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activeSearchListElement, items]);
+
   return (
         <List>
-            {loading ? <ListItem className='disabled'>Searching...</ListItem> : items.map((city) => (city.fields.population ? <ListItem key={Math.random()} onClick={() => handleSearchQueryFromList(`${city.fields.accentcity}, ${city.fields.country}`)}>{city.fields.accentcity}, {city.fields.country.toUpperCase()}</ListItem> : null))}
+            {loading ? <ListItem className="disabled">Searching...</ListItem> : items.map((city, id) => (
+                <ListItem className={id === activeSearchListElement ? 'active' : null}
+                key={city.recordid}
+                onMouseOver={() => handleMouseOverListElement(city)}
+                onClick={() => handleSearchQueryFromList(`${city.fields.accentcity}, ${city.fields.country}`)}>
+                    {city.fields.accentcity}, {city.fields.country.toUpperCase()}
+                </ListItem>))}
         </List>
   );
 }
@@ -33,27 +78,27 @@ const ListItem = styled.li`
     cursor: pointer;
     overflow: hidden;
 
-    &:last-child {
-        border-bottom: none;
-    }
-
-    &:hover {
+    &.active {
         background: #243b55;
         color: #eee;
     }
 
-    &.disabled {
-        cursor: default;
+    &:last-child {
+        border-bottom: none;
     }
 
-    &.disabled:hover {
-        background: #eee;
-        color: #111;
+    &.disabled {
+        cursor: default;
     }
 `;
 
 SearchList.propTypes = {
   items: propTypes.array,
   loading: propTypes.bool,
+  activeSearchListElement: propTypes.number,
+  onSetActiveSearchListElementByMouseover: propTypes.func,
+  onSetActiveSearchListElement: propTypes.func,
   handleSearchQueryFromList: propTypes.func,
+  setSelectedCity: propTypes.func,
+  formComponent: propTypes.object,
 };

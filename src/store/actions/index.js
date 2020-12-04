@@ -118,6 +118,16 @@ export const resetSearchList = () => ({
   type: actions.FETCH_SEARCH_LIST_FAILURE,
 });
 
+export const setActiveSearchListElement = (val) => ({
+  type: actions.SET_ACTIVE_SEARCH_LIST_ELEMENT,
+  payload: val,
+});
+
+export const setActiveSearchListElementByMouseover = (val) => ({
+  type: actions.SET_ACTIVE_SEARCH_LIST_ELEMENT_BY_MOUSEOVER,
+  payload: val,
+});
+
 export const fetchSearchList = (query) => async (dispatch) => {
   if (query.trim().length > 2) {
     dispatch(fetchSearchListStart());
@@ -125,7 +135,13 @@ export const fetchSearchList = (query) => async (dispatch) => {
     axios
       .get(`https://public.opendatasoft.com/api/records/1.0/search/?dataset=worldcitiespop&q=${query}&rows=5&sort=population`)
       .then((res) => {
-        dispatch(fetchSearchListSuccess(res.data.records));
+        const list = [];
+
+        for (let i = 0; i < res.data.records.length; i += 1) {
+          if (res.data.records[i].fields.population) list.push(res.data.records[i]);
+        }
+
+        dispatch(fetchSearchListSuccess(list));
       })
       .catch(() => {
         dispatch(fetchSearchListFailure());

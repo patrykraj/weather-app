@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import propTypes from 'prop-types';
@@ -20,12 +20,20 @@ function Form({
   list,
   loading,
   onFetchSearchList,
+  activeSearchListElement,
+  onSetActiveSearchListElement,
+  onSetActiveSearchListElementByMouseover,
 }) {
+  const [selectedCity, setSelectedCity] = useState(null);
+  const formRef = useRef();
+
   const handleSetQuery = (e) => {
     if (!/^[a-zA-Z\s]*$/g.test(e.target.value)) return;
     setSearchedQuery(e.target.value);
 
     onFetchSearchList(e.target.value);
+    onSetActiveSearchListElement(-activeSearchListElement);
+    setSelectedCity(null);
   };
 
   const handleSearchQuery = (e) => {
@@ -61,15 +69,41 @@ function Form({
     }
   };
 
+  const handleSelectedCityFromList = (e, query) => {
+    e.preventDefault();
+
+    const city = `${query.fields.city}, ${query.fields.country}`;
+
+    const url = forecast ? `https://api.weatherbit.io/v2.0/forecast/daily?city=${city}&key=${fkey}` : `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${wkey}&units=metric`;
+
+    if (hourly) {
+      onFetchHourlyByName(city, fkey, wkey);
+    } else {
+      onFetchWeatherByName(forecast, url);
+    }
+
+    setSearchedQuery('');
+    setSelectedCity(null);
+  };
+
   return (
-        <FormContainer onSubmit={handleSearchQuery}>
-            <Input type='text' value={searchedQuery} placeholder='City' onInput={handleSetQuery} pattern="[A-Za-z\s]+" title="Please use only letters"/>
-            <Submit type='submit'>
-                <img src={Glass} alt='glass' />
+        <FormContainer ref={formRef} id="form"
+        onSubmit={selectedCity ? (e) => handleSelectedCityFromList(
+          e, selectedCity,
+        ) : handleSearchQuery}>
+            <Input type="text" value={searchedQuery} placeholder="City" onInput={handleSetQuery} pattern="[A-Za-z\s]+" title="Please use only letters"/>
+            <Submit type="submit">
+                <img src={Glass} alt="glass" />
             </Submit>
             {list && <SearchList items={list}
               handleSearchQueryFromList={handleSearchQueryFromList}
-              loading={loading} />
+              loading={loading}
+              activeSearchListElement={activeSearchListElement}
+              onSetActiveSearchListElement={onSetActiveSearchListElement}
+              onSetActiveSearchListElementByMouseover={onSetActiveSearchListElementByMouseover}
+              setSelectedCity={setSelectedCity}
+              formComponent={formRef.current}
+              />
             }
         </FormContainer>
   );
@@ -78,6 +112,7 @@ function Form({
 const mapStateToProps = (state) => ({
   list: state.searchListData,
   loading: state.searchListLoading,
+  activeSearchListElement: state.activeSearchListElement,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -85,6 +120,10 @@ const mapDispatchToProps = (dispatch) => ({
   onFetchHourlyByName: (name, fKey, wKey) => dispatch(actions.fetchHourlyByName(name, fKey, wKey)),
   onSetError: (payload) => dispatch(actions.setError(payload)),
   onFetchSearchList: (query) => dispatch(actions.fetchSearchList(query)),
+  onSetActiveSearchListElement: (val) => dispatch(actions.setActiveSearchListElement(val)),
+  onSetActiveSearchListElementByMouseover: (val) => dispatch(
+    actions.setActiveSearchListElementByMouseover(val),
+  ),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form);
@@ -146,13 +185,16 @@ const Submit = styled.button`
 
 Form.propTypes = {
   searchedQuery: propTypes.string,
+  activeSearchListElement: propTypes.number,
   forecast: propTypes.bool,
   loading: propTypes.bool,
   hourly: propTypes.bool,
+  list: propTypes.array,
   onFetchWeatherByName: propTypes.func,
   onFetchHourlyByName: propTypes.func,
   onFetchSearchList: propTypes.func,
   onSetError: propTypes.func,
   setSearchedQuery: propTypes.func,
-  list: propTypes.array,
+  onSetActiveSearchListElement: propTypes.func,
+  onSetActiveSearchListElementByMouseover: propTypes.func,
 };
