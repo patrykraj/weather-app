@@ -79,7 +79,7 @@ const ListItem = styled.li`
     overflow: hidden;
 
     &.active {
-        background: #243b55;
+        background: #7188A2;
         color: #eee;
     }
 

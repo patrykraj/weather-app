@@ -51,16 +51,25 @@ const Nav = styled.nav`
 
     ul {
         display: flex;
+        align-items: center;
         justify-content: space-around;
         list-style: none;
         margin: 0;
         padding: 0;
+
+        li {
+          display: flex;
+          align-items: center;
+        }
 
         a {
             color: #ccc;
             text-decoration: none;
             text-transform: capitalize;
             transition: all .2s;
+            padding: 2px 15px;
+            border-radius: 15px;
+            font-size: 1.7rem;
 
             &:hover {
                 color: #fff;
@@ -68,6 +77,7 @@ const Nav = styled.nav`
 
             &.active {
                 color: #fff;
+                background-color: rgba(255, 255, 255, .2);
             }
         }
     }
