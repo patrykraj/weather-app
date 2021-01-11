@@ -11,19 +11,19 @@ function Hours({ hour, timezone }) {
   return (
         <ListItem>
             <ItemInfo key={hour.dt} onClick={() => setOpen(!open)} open={open}>
-                <span className='date'>
-                    <p className='date-hour'>
+                <span className="date">
+                    <p className="date-hour">
                         {date.getUTCHours()}
                     </p>
-                    <p className='date-day'>
+                    <p className="date-day">
                         {date.getUTCDate()}.{date.getUTCMonth() + 1}
                     </p>
                 </span>
-                <WeatherIcon src={`http://openweathermap.org/img/wn/${hour.weather[0].icon}@4x.png`} alt='weather_icon'/>
+                <WeatherIcon src={`http://openweathermap.org/img/wn/${hour.weather[0].icon}@4x.png`} alt="weather_icon"/>
                 <span>{Number(hour.temp.toFixed()) === 0 ? 0 : hour.temp.toFixed()}&deg;C</span>
                 <span>Clouds: {hour.clouds}%</span>
                 <span>POP: {(hour.pop * 100).toFixed()}%</span>
-                <span className='arrow-pointer'>❯</span>
+                <span className="arrow-pointer">❯</span>
             </ItemInfo>
             <ItemAdditional className={open ? 'open' : null}>
                 <span>Humidity: {hour.humidity}%</span>

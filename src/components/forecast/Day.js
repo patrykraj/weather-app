@@ -15,10 +15,10 @@ function Day({ day }) {
                         <h4>{Math.round(day.low_temp)}&deg;</h4>
                     </div>
                     <p>Pop: {day.pop}%</p>
-                    <span className='arrow-pointer'>❯</span>
+                    <span className="arrow-pointer">❯</span>
                 </DayElement>
                 <InfoElement className={open ? 'open' : null}>
-                    <div className='day-info'>
+                    <div className="day-info">
                         <span>
                             {day.weather.description}
                         </span>
