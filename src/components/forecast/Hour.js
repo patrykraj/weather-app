@@ -9,8 +9,8 @@ function Hours({ hour, timezone }) {
   const date = convertDate(hour.dt, timezone, false, true);
 
   return (
-        <ListItem>
-            <ItemInfo key={hour.dt} onClick={() => setOpen(!open)} open={open}>
+        <ListItem onClick={() => setOpen(!open)}>
+            <ItemInfo key={hour.dt} open={open}>
                 <span className="date">
                     <p className="date-hour">
                         {date.getUTCHours()}
@@ -60,7 +60,7 @@ const ItemInfo = styled.div`
         }
 
         .date-day {
-            font-size: .85rem;
+            font-size: 14px;
             color: #eee;
         }
     }

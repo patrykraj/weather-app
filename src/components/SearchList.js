@@ -61,7 +61,7 @@ const List = styled.ul`
     position: absolute;
     width: 100%;
     z-index: 1;
-    font-size: 1rem;
+    font-size: 16px;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -79,7 +79,7 @@ const ListItem = styled.li`
     overflow: hidden;
 
     &.active {
-        background: #243b55;
+        background: #597696;
         color: #eee;
     }
 

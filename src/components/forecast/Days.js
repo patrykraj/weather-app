@@ -21,7 +21,6 @@ const DayList = styled.ul`
     margin: 0;
     width: 80%;
     max-width: 768px;
-    font-size: 1.2rem;
     list-style: none;
 `;
 

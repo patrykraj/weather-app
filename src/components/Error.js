@@ -12,7 +12,7 @@ export default ErrorNotification;
 
 const ErrorElement = styled.p`
     color: #ec544c;
-    font-size: 1.5rem;
+    font-size: 24px;
 `;
 
 ErrorNotification.propTypes = {
