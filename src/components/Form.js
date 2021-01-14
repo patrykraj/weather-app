@@ -136,7 +136,7 @@ const FormContainer = styled.form`
 const Input = styled.input`
     max-width: 100%;
     background: none;
-    font-size: 1.5rem;
+    font-size: 24px;
     border: none;
     border-bottom: 2px solid #eee;
     padding: 5px 2px;
@@ -162,7 +162,7 @@ const Submit = styled.button`
     position: absolute;
     right: 10px;
     top: 9px;
-    font-size: 1.4rem;
+    font-size: 22px;
     color: #eee;
     background: transparent;
     border: none;
